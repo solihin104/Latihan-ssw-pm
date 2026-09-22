@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan SSW Pengolahan Makanan (特定技能 食品製造業)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+                        jp: ['"Noto Sans JP"', 'sans-serif']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ruby {
+            ruby-position: over;
+        }
+        rt {
+            font-size: 0.65em;
+            color: #16a34a;
+            font-weight: 500;
+            user-select: none;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-brand-500/20">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-900 leading-tight text-base sm:text-lg">SSW Pengolahan Makanan</h1>
+                    <p class="text-xs text-slate-500 font-medium">特定技能1号 食品製造業 模擬試験</p>
+                </div>
+            </div>
+
+            <!-- Header Controls -->
+            <div class="flex items-center space-x-2">
+                <button id="btnStudyMode" onclick="switchTab('study')" class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-open text-brand-600"></i>
+                    <span class="hidden sm:inline">Mode</span> Belajar
+                </button>
+                <button id="btnQuizMode" onclick="switchTab('quiz')" class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition bg-brand-600 text-white hover:bg-brand-700 shadow-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-play"></i>
+                    <span class="hidden sm:inline">Mode</span> Kuis
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col">
+
+        <!-- ==================== QUIZ MODE CONTAINER ==================== -->
+        <div id="quizContainer" class="flex-1 flex flex-col">
+            
+            <!-- Quiz Start / Cover Screen -->
+            <div id="quizStartCard" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm text-center my-auto flex flex-col items-center">
+                <div class="w-20 h-20 bg-brand-50 text-brand-600 rounded-3xl flex items-center justify-center text-3xl mb-4 border border-brand-100 shadow-inner">
+                    <i class="fa-solid fa-clipboard-question"></i>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Simulasi Kuis SSW</h2>
+                <p class="text-slate-600 max-w-md text-sm sm:text-base mb-6 leading-relaxed">
+                    Uji pemahaman Anda dengan 15 soal standar ujian Pengolahan Makanan (食品製造業). Setiap soal dilengkapi penjelasan dalam bahasa Indonesia.
+                </p>
+
+                <div class="grid grid-cols-3 gap-3 w-full max-w-md mb-8 text-center">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <span class="block text-slate-400 text-xs font-semibold mb-1">TOTAL SOAL</span>
+                        <span class="text-slate-800 font-bold text-lg">15 Soal</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <span class="block text-slate-400 text-xs font-semibold mb-1">PILIHAN</span>
+                        <span class="text-slate-800 font-bold text-lg">A / B / C</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <span class="block text-slate-400 text-xs font-semibold mb-1">LULUS BARK</span>
+                        <span class="text-slate-800 font-bold text-lg">80%</span>
+                    </div>
+                </div>
+
+                <button onclick="startQuiz()" class="w-full sm:w-auto px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-2xl shadow-lg shadow-brand-600/30 transition transform hover:-translate-y-0.5 active:translate-y-0 text-base flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-play"></i> Mulai Kuis Sekarang
+                </button>
+            </div>
+
+            <!-- Active Quiz Screen -->
+            <div id="quizActiveCard" class="hidden flex-1 flex flex-col">
+                <!-- Progress Header -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm mb-4">
+                    <div class="flex items-center justify-between mb-2 text-xs sm:text-sm font-semibold">
+                        <span id="quizProgressText" class="text-slate-600">Soal 1 dari 15</span>
+                        <span id="quizTimerText" class="text-brand-700 flex items-center gap-1 font-mono">
+                            <i class="fa-regular fa-clock"></i> 00:00
+                        </span>
+                    </div>
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                        <div id="quizProgressBar" class="bg-brand-500 h-full transition-all duration-300 rounded-full" style="width: 6.66%;"></div>
+                    </div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200/80 shadow-sm flex-1 flex flex-col justify-between">
+                    <div>
+                        <!-- Question Tag -->
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-bold mb-4 border border-brand-100">
+                            <span>Mondai</span>
+                            <span id="questionNumberBadge">#1</span>
+                        </div>
+
+                        <!-- Question Text -->
+                        <h3 id="questionText" class="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed font-jp mb-6">
+                            <!-- Injected by JS -->
+                        </h3>
+
+                        <!-- Options List -->
+                        <div id="optionsContainer" class="space-y-3 mb-6">
+                            <!-- Injected by JS -->
+                        </div>
+
+                        <!-- Instant Feedback Area -->
+                        <div id="feedbackArea" class="hidden rounded-2xl p-4 border text-sm animate-fade-in mb-4">
+                            <div class="flex items-center gap-2 font-bold mb-1" id="feedbackTitle"></div>
+                            <p id="feedbackText" class="text-slate-700 leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100 gap-3">
+                        <button id="btnPrev" onclick="prevQuestion()" class="px-4 py-2.5 text-slate-600 hover:bg-slate-100 font-semibold rounded-xl text-sm transition flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-arrow-left"></i> Sebelum
+                        </button>
+
+                        <button id="btnNext" onclick="nextQuestion()" disabled class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold rounded-xl text-sm transition flex items-center gap-2 shadow-sm disabled:shadow-none">
+                            <span>Lanjut</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Result Screen -->
+            <div id="quizResultCard" class="hidden bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm text-center my-auto flex flex-col items-center">
+                <div id="resultBadgeIcon" class="w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-4 shadow-lg">
+                    <!-- Dynamic -->
+                </div>
+
+                <h2 id="resultTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-1">Hasil Simulasi</h2>
+                <p id="resultSubtitle" class="text-slate-500 text-sm mb-6"></p>
+
+                <!-- Score Board -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-md mb-8">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <span class="block text-slate-400 text-xs font-semibold mb-1">SKOR AKHIR</span>
+                        <span id="scorePercent" class="text-slate-900 font-black text-2xl sm:text-3xl">0%</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <span class="block text-slate-400 text-xs font-semibold mb-1">BENAR / TOTAL</span>
+                        <span id="scoreDetail" class="text-slate-900 font-bold text-xl sm:text-2xl">0 / 15</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 col-span-2 sm:col-span-1">
+                        <span class="block text-slate-400 text-xs font-semibold mb-1">WAKTU</span>
+                        <span id="timeTaken" class="text-slate-900 font-bold text-xl sm:text-2xl font-mono">00:00</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+                    <button onclick="startQuiz()" class="flex-1 px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl transition shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> Coba Lagi
+                    </button>
+                    <button onclick="switchTab('study')" class="flex-1 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> Review Soal
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== STUDY MODE CONTAINER ==================== -->
+        <div id="studyContainer" class="hidden flex-1 flex flex-col space-y-4">
+            <div class="bg-brand-900 text-white p-6 rounded-3xl shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-brand-400"></i> Mode Belajar Soal & Jawaban
+                    </h2>
+                    <p class="text-brand-200 text-xs sm:text-sm">
+                        Pelajari seluruh 15 soal beserta kunci jawaban resmi dan rangkuman poin penting.
+                    </p>
+                </div>
+                <button onclick="toggleAllAnswers()" id="btnToggleAnswers" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-semibold backdrop-blur transition border border-white/20 whitespace-nowrap">
+                    <i class="fa-solid fa-eye"></i> Tampilkan Semua Jawaban
+                </button>
+            </div>
+
+            <div id="studyList" class="space-y-4">
+                <!-- Injected dynamically by JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-500">
+            <p>Latihan Ujian Tokutei Ginou (特定技能) - Pengolahan Makanan (食品製造業)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Questions Data
+        const questionsData = [
+            {
+                id: 1,
+                question: "冷蔵庫（れいぞうこ）の 温度（おんど）は、食品衛生法（しょくひんえいせいほう）で 何度（なんど）以下（いか）と 決められて（きめられて）いますか。",
+                options: [
+                    "A. -15℃ 以下（いか）",
+                    "B. 0℃ 以下（いか）",
+                    "C. 10℃ 以下（いか）"
+                ],
+                answer: 2, // Index of C
+                explanation: "Menurut Undang-Undang Higiene Makanan (食品衛生法), suhu standar penyimpanan untuk <b>Reizooko (Kulkas/Lemari Pendingin)</b> adalah <b>10℃ atau lebih rendah (10℃以下)</b>."
+            },
+            {
+                id: 2,
+                question: "冷凍庫（れいとうこ）の 温度（おんど）は、食品衛生法（しょくひんえいせいほう）で 何度（なんど）以下（いか）と 決められて（きめられて）いますか。",
+                options: [
+                    "A. 10℃ 以下（いか）",
+                    "B. 0℃ 以下（いか）",
+                    "C. -15℃ 以下（いか）"
+                ],
+                answer: 2, // Index of C
+                explanation: "Menurut Undang-Undang Higiene Makanan (食品衛生法), suhu standar penyimpanan untuk <b>Reitooko (Freezer/Lemari Pembeku)</b> adalah <b>-15℃ atau lebih rendah (-15℃以下)</b>."
+            },
+            {
+                id: 3,
+                question: "「未開封（みかいふう）の 加工食品（かこうしょくひん）を 決められた（きめられた）条件（じょうけん）で 保存（ほぞん）した 場合（ばあい）に、美味しく（おいしく）食べられる（たべられる）期間（きかん）の 最後の（さいごの）日（ひ）」の ことを 何（なに）と 言いますか。",
+                options: [
+                    "A. 使用期限（しようきげん）",
+                    "B. 賞味期限（しょうみきげん）",
+                    "C. 消費期限（しょうひきげん）"
+                ],
+                answer: 1, // Index of B
+                explanation: "<b>Shoomi Kigen (賞味期限)</b> adalah batas tanggal kualitas terbaik ('Best Before'). Makanan masih lezat dimakan jika belum dibuka dan disimpan sesuai petunjuk."
+            },
+            {
+                id: 4,
+                question: "食中毒（しょくちゅうどく）の 原因（げんいん）になる 可能性（かのうせい）が 高くなる（たかくなる）ため、期限（きげん）が 過ぎたら（すぎたら）絶対に（ぜったいに）使ってはいけない（つかってはいけない）ものは どれですか。",
+                options: [
+                    "A. 賞味期限（しょうみきげん）",
+                    "B. 消費期限（しょうひきげん）",
+                    "C. 製造年月日（せいぞうねんがっぴ）"
+                ],
+                answer: 1, // Index of B
+                explanation: "<b>Shoohi Kigen (消費期限)</b> adalah tanggal kedaluwarsa keamanan pangan ('Use By'). Jika tanggal ini lewat, makanan berisiko tinggi menyebabkan keracunan makanan dan <b>SAMA SEKALI TIDAK BOLEH DIGUNAKAN</b>."
+            },
+            {
+                id: 5,
+                question: "先に（さきに）納品（のうひん）された 原材料（げんざいりょう）から 先に（さきに）使う（つかう）管理（かんり）方法（ほうほう）を 何（なに）と 言いますか。",
+                options: [
+                    "A. 先入れ先出し（さきいれ・さきだし）",
+                    "B. 後入れ先出し（あといれ・さきだし）",
+                    "C. 整理整頓（せいりせいとん）"
+                ],
+                answer: 0, // Index of A
+                explanation: "Metode FIFO (First In, First Out) dalam bahasa Jepang disebut <b>Saki-ire Saki-dashi (先入れ先出し)</b>, yaitu menggunakan bahan baku yang datang lebih awal terlebih dahulu."
+            },
+            {
+                id: 6,
+                question: "袋（ふくろ）や 容器（ようき）の 切れ端（きれはし）が 食品（しょくひん）に 混入（こんにゅう）しないように する工夫（くふう）として、正しい（ただしい）ものは どれですか。",
+                options: [
+                    "A. 同じ（おなじ）場所（ばしょ）を 何回（なんかい）も 切る（きる）",
+                    "B. 同じ（おなじ）場所（ばしょ）を 2回（にかい）以上（いじょう）切らない（きらない）",
+                    "C. 切れ端（きれはし）の 数（かず）は 確認（かくにん）しなくて よい"
+                ],
+                answer: 1, // Index of B
+                explanation: "Untuk mencegah serpihan potongan plastik/kemasan masuk ke dalam makanan, aturan utamanya adalah <b>TIDAK MENPOTONG DI TEMPAT YANG SAMA 2 KALI ATAU LEBIH (同じ場所を2回以上切らない)</b>."
+            },
+            {
+                id: 7,
+                question: "水道（すいどう）などの あて水（みず）で 解凍（かいとう）する 方法（ほうほう）を 何（なに）と 言いますか。",
+                options: [
+                    "A. 自然解凍（しぜんかいとう）",
+                    "B. 冷蔵庫解凍（れいぞうこかいとう）",
+                    "C. 流水解凍（りゅうすいかいとう）"
+                ],
+                answer: 2, // Index of C
+                explanation: "Proses mencairkan bahan makanan beku menggunakan air mengalir dari keran disebut <b>Ryuusui Kaitoo (流水解凍)</b>."
+            },
+            {
+                id: 8,
+                question: "肉（にく）や 魚（さかな）から 出てくる（でてくる）汁（じる）（ドリップ）の 対策（たいさく）として、正しい（ただしい）ものは どれですか。",
+                options: [
+                    "A. 他の（ほかの）食品（しょくひん）と 一緒の（いっしょの）バットに 入れる",
+                    "B. 網目（あみめ）トレーなどに 入れて（いれて）解凍（かいとう）し、排水（はいすい）へ 直接（ちょくせつ）流す（ながす）",
+                    "C. ドリップは 拭き取らずに（ふきとらずに）そのまま 放置（ほうち）する"
+                ],
+                answer: 1, // Index of B
+                explanation: "Cairan tetesan daging/ikan (Drip) dapat menularkan bakteri. Cara pencegahannya adalah menempatkannya di <b>nampan berjaring (Amime Tray)</b> agar cairan langsung mengalir ke pembuangan air."
+            },
+            {
+                id: 9,
+                question: "一般的な（いっぱんてきな）食中毒菌（しょくちゅうどくきん）を 加熱（かねつ）殺菌（さっきん）する 場合（ばあい）、中心（ちゅうしん）温度（おんど）と 時間（じかん）の 基準（きじゅん）は どれですか。",
+                options: [
+                    "A. 60℃ で 10分間（じゅっぷんかん）以上（いじょう）",
+                    "B. 75℃ で 1分間（いっぷんかん）以上（いじょう）",
+                    "C. 100℃ で 5分間（ごふんかん）以上（いじょう）"
+                ],
+                answer: 1, // Index of B
+                explanation: "Standar umum pemanasan untuk membunuh bakteri keracunan makanan adalah bagian pusat (tengah) makanan mencapai <b>75℃ selama 1 menit atau lebih (75℃で1分間以上)</b>."
+            },
+            {
+                id: 10,
+                question: "ノロウイルスを 加熱（かねつ）殺菌（さっきん）する 場合（ばあい）、中心（ちゅうしん）温度（おんど）と 時間（じかん）の 基準（きじゅん）は どれですか。",
+                options: [
+                    "A. 75℃ で 1分間（いっぷんかん）以上（いじょう）",
+                    "B. 85℃～90℃ で 90秒間（びょうかん）以上（いじょう）",
+                    "C. 120℃ で 4分間（よんぷんかん）以上（いじょう）"
+                ],
+                answer: 1, // Index of B
+                explanation: "Norovirus lebih tahan panas dari bakteri biasa, sehingga membutuhkan pemanasan pusat pada suhu <b>85℃～90℃ selama 90 detik atau lebih (85℃～90℃で90秒間以上)</b>."
+            },
+            {
+                id: 11,
+                question: "セレウス菌（きん）や ボツリヌス菌（きん）などの 芽胞（がほう）を 作る（つくる）菌（きん）を 殺菌（さっきん）する 基準（きじゅん）は どれですか。",
+                options: [
+                    "A. 75℃ で 1分間（いっぷんかん）以上（いじょう）",
+                    "B. 85℃～90℃ で 90秒間（びょうかん）以上（いじょう）",
+                    "C. 120℃ で 4分間（よんぷんかん）以上（いじょう）"
+                ],
+                answer: 2, // Index of C
+                explanation: "Bakteri pembentuk spora (芽胞 - Gahoo) seperti Bacillus cereus & Clostridium botulinum sangat kuat terhadap panas dan membutuhkan sterilasi suhu tinggi: <b>120℃ selama 4 menit atau lebih (120℃で4分間以上)</b>."
+            },
+            {
+                id: 12,
+                question: "加熱（かねつ）調理（ちょうり）が 終わった（おわった）食品（しょくひん）は、中心（ちゅうしん）温度（おんど）を 30分（さんじゅっぷん）以内に（いないに）何度（なんど）まで 下げる（さげる）必要（ひつよう）が ありますか。",
+                options: [
+                    "A. 30℃",
+                    "B. 20℃",
+                    "C. 10℃"
+                ],
+                answer: 1, // Index of B
+                explanation: "Setelah dimasak, makanan harus didinginkan dengan cepat untuk melewati area suhu berkembang biaknya bakteri: dalam <b>30 menit</b> suhu pusat harus turun hingga <b>20℃</b>."
+            },
+            {
+                id: 13,
+                question: "加熱（かねつ）調理（ちょうり）が 終わった（おわった）食品（しょくひん）は、中心（ちゅうしん）温度（おんど）を 60分（ろくじゅっぷん）以内に（いないに）何度（なんど）まで 下げる（さげる）必要（ひつよう）が ありますか。",
+                options: [
+                    "A. 20℃",
+                    "B. 10℃",
+                    "C. 0℃"
+                ],
+                answer: 1, // Index of B
+                explanation: "Proses pendinginan berlanjut: dalam kurun waktu <b>60 menit</b>, suhu pusat makanan harus diturunkan hingga <b>10℃</b>."
+            },
+            {
+                id: 14,
+                question: "加熱（かねつ）しない 生（なま）の 野菜（やさい）サラダなどの 殺菌（さっきん）に 使われる（つかわれる）薬剤（やくざい）は どれですか。",
+                options: [
+                    "A. アルコール溶液（ようえき）",
+                    "B. 次亜塩素酸（じあえんそさん）ナトリウム溶液（ようえき）",
+                    "C. 洗剤（せんざい）溶液（ようえき）"
+                ],
+                answer: 1, // Index of B
+                explanation: "Untuk mencuci dan mematikan kuman pada sayuran mentah/salad yang tidak dimasak, digunakan larutan <b>Sodium Hypochlorite / Jia-ensosannatoriumu (次亜塩素酸ナトリウム溶液)</b>."
+            },
+            {
+                id: 15,
+                question: "次亜塩素酸（じあえんそさん）ナトリウム溶液（ようえき）の 濃度（のうど）が 200ppm の 場合（ばあい）、処理（しょり）時間（じかん）は 何分（なんぷん）ですか。",
+                options: [
+                    "A. 1分間（いっぷんかん）",
+                    "B. 5分間（ごふんかん）",
+                    "C. 10分間（じゅっぷんかん）"
+                ],
+                answer: 1, // Index of B
+                explanation: "Waktu perendaman larutan Sodium Hypochlorite: jika konsentrasi <b>200ppm</b> direndam selama <b>5 menit</b>. *(Catatan: Jika konsentrasi 100ppm, direndam selama 10 menit)*."
+            }
+        ];
+
+        // App State
+        let currentTab = 'quiz'; // 'quiz', 'study'
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questionsData.length).fill(null);
+        let quizTimerSeconds = 0;
+        let timerInterval = null;
+        let allAnswersVisibleInStudy = false;
+
+        // Audio Context for sound effects
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'wrong') {
+                    osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+                    osc.frequency.setValueAtTime(196, audioCtx.currentTime + 0.15); // G3
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.35);
+                }
+            } catch (e) {}
+        }
+
+        // Convert Kanji(furigana) -> <ruby>Kanji<rt>furigana</rt></ruby>
+        function formatFuriganaText(text) {
+            return text.replace(/([一-龠々ヶぁ-んァ-ヴa-zA-R0-9~～\-ー]+)（([^）]+)）/g, (match, word, furi) => {
+                return `<ruby>${word}<rt>${furi}</rt></ruby>`;
+            });
+        }
+
+        // Navigation Tab Switcher
+        function switchTab(tab) {
+            currentTab = tab;
+            const quizContainer = document.getElementById('quizContainer');
+            const studyContainer = document.getElementById('studyContainer');
+            const btnQuiz = document.getElementById('btnQuizMode');
+            const btnStudy = document.getElementById('btnStudyMode');
+
+            if (tab === 'quiz') {
+                quizContainer.classList.remove('hidden');
+                studyContainer.classList.add('hidden');
+                btnQuiz.className = "px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition bg-brand-600 text-white shadow-sm flex items-center gap-1.5";
+                btnStudy.className = "px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center gap-1.5";
+            } else {
+                quizContainer.classList.add('hidden');
+                studyContainer.classList.remove('hidden');
+                btnStudy.className = "px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition bg-brand-600 text-white shadow-sm flex items-center gap-1.5";
+                btnQuiz.className = "px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center gap-1.5";
+                renderStudyList();
+            }
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(questionsData.length).fill(null);
+            quizTimerSeconds = 0;
+
+            document.getElementById('quizStartCard').classList.add('hidden');
+            document.getElementById('quizResultCard').classList.add('hidden');
+            document.getElementById('quizActiveCard').classList.remove('hidden');
+
+            // Start timer
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                quizTimerSeconds++;
+                const mins = Math.floor(quizTimerSeconds / 60).toString().padStart(2, '0');
+                const secs = (quizTimerSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('quizTimerText').innerHTML = `<i class="fa-regular fa-clock"></i> ${mins}:${secs}`;
+            }, 1000);
+
+            renderCurrentQuestion();
+        }
+
+        function renderCurrentQuestion() {
+            const q = questionsData[currentQuestionIndex];
+            
+            // Progress Bar & Badge
+            document.getElementById('questionNumberBadge').innerText = `#${currentQuestionIndex + 1}`;
+            document.getElementById('quizProgressText').innerText = `Soal ${currentQuestionIndex + 1} dari ${questionsData.length}`;
+            const progressPercent = ((currentQuestionIndex + 1) / questionsData.length) * 100;
+            document.getElementById('quizProgressBar').style.width = `${progressPercent}%`;
+
+            // Question Text
+            document.getElementById('questionText').innerHTML = formatFuriganaText(q.question);
+
+            // Render Options
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            const selectedAnswer = userAnswers[currentQuestionIndex];
+
+            q.options.forEach((optText, index) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = `w-full text-left p-4 rounded-2xl border-2 transition font-jp font-medium text-sm sm:text-base flex items-center justify-between group ${
+                    selectedAnswer === index 
+                        ? (index === q.answer 
+                            ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-sm' 
+                            : 'bg-rose-50 border-rose-500 text-rose-900 shadow-sm')
+                        : (selectedAnswer !== null && index === q.answer 
+                            ? 'bg-emerald-50 border-emerald-400 text-emerald-900' 
+                            : 'bg-white border-slate-200 hover:border-brand-500 hover:bg-slate-50/80 text-slate-800')
+                }`;
+
+                let iconHtml = '';
+                if (selectedAnswer !== null) {
+                    if (index === q.answer) {
+                        iconHtml = '<i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>';
+                    } else if (selectedAnswer === index) {
+                        iconHtml = '<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>';
+                    }
+                }
+
+                optBtn.innerHTML = `
+                    <span class="pr-2">${formatFuriganaText(optText)}</span>
+                    ${iconHtml}
+                `;
+
+                optBtn.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optBtn);
+            });
+
+            // Feedback Area
+            const feedbackArea = document.getElementById('feedbackArea');
+            if (selectedAnswer !== null) {
+                const isCorrect = selectedAnswer === q.answer;
+                feedbackArea.classList.remove('hidden');
+                feedbackArea.className = `rounded-2xl p-4 border text-sm animate-fade-in ${
+                    isCorrect 
+                        ? 'bg-emerald-50/80 border-emerald-200 text-emerald-900' 
+                        : 'bg-rose-50/80 border-rose-200 text-rose-900'
+                }`;
+
+                document.getElementById('feedbackTitle').innerHTML = isCorrect 
+                    ? '<i class="fa-solid fa-circle-check text-emerald-600"></i> Jawaban Anda Benar (正解)' 
+                    : '<i class="fa-solid fa-circle-xmark text-rose-500"></i> Jawaban Kurang Tepat (不正解)';
+
+                document.getElementById('feedbackText').innerHTML = q.explanation;
+                document.getElementById('btnNext').disabled = false;
+            } else {
+                feedbackArea.classList.add('hidden');
+                document.getElementById('btnNext').disabled = true;
+            }
+
+            // Prev Button state
+            document.getElementById('btnPrev').disabled = currentQuestionIndex === 0;
+
+            // Change Next button text on last question
+            const btnNextSpan = document.getElementById('btnNext').querySelector('span');
+            if (currentQuestionIndex === questionsData.length - 1) {
+                btnNextSpan.innerText = "Lihat Hasil";
+            } else {
+                btnNextSpan.innerText = "Lanjut";
+            }
+        }
+
+        function selectOption(index) {
+            if (userAnswers[currentQuestionIndex] !== null) return; // Prevent changing after selected
+            
+            userAnswers[currentQuestionIndex] = index;
+            const q = questionsData[currentQuestionIndex];
+
+            if (index === q.answer) {
+                playSound('correct');
+            } else {
+                playSound('wrong');
+            }
+
+            renderCurrentQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questionsData.length - 1) {
+                currentQuestionIndex++;
+                renderCurrentQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderCurrentQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            clearInterval(timerInterval);
+
+            // Calculate Score
+            let correctCount = 0;
+            userAnswers.forEach((ans, i) => {
+                if (ans === questionsData[i].answer) correctCount++;
+            });
+
+            const scorePercentage = Math.round((correctCount / questionsData.length) * 100);
+
+            document.getElementById('quizActiveCard').classList.add('hidden');
+            document.getElementById('quizResultCard').classList.remove('hidden');
+
+            document.getElementById('scorePercent').innerText = `${scorePercentage}%`;
+            document.getElementById('scoreDetail').innerText = `${correctCount} / ${questionsData.length}`;
+
+            const mins = Math.floor(quizTimerSeconds / 60).toString().padStart(2, '0');
+            const secs = (quizTimerSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('timeTaken').innerText = `${mins}:${secs}`;
+
+            // Result Badge
+            const badgeIcon = document.getElementById('resultBadgeIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultSubtitle = document.getElementById('resultSubtitle');
+
+            if (scorePercentage >= 80) {
+                badgeIcon.className = "w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-4 bg-emerald-100 text-emerald-600 border-4 border-emerald-200 shadow-emerald-200";
+                badgeIcon.innerHTML = '<i class="fa-solid fa-trophy"></i>';
+                resultTitle.innerText = "Lulus! (合格)";
+                resultSubtitle.innerText = "Luar biasa! Pemahaman Anda tentang higienis pengolahan makanan sangat baik.";
+            } else {
+                badgeIcon.className = "w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-4 bg-amber-100 text-amber-600 border-4 border-amber-200 shadow-amber-200";
+                badgeIcon.innerHTML = '<i class="fa-solid fa-seedling"></i>';
+                resultTitle.innerText = "Perlu Latihan Lagi";
+                resultSubtitle.innerText = "Jangan berkecil hati! Pelajari kembali materi pada Mode Belajar dan coba lagi.";
+            }
+        }
+
+        function renderStudyList() {
+            const container = document.getElementById('studyList');
+            container.innerHTML = '';
+
+            questionsData.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm";
+
+                const isAnswerShown = allAnswersVisibleInStudy;
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <span class="px-2.5 py-1 bg-brand-50 text-brand-700 rounded-lg text-xs font-bold border border-brand-100">
+                            Soal #${q.id}
+                        </span>
+                        <button onclick="toggleSingleAnswer(${index})" class="text-xs font-semibold text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            <i class="fa-solid ${isAnswerShown ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                            <span>${isAnswerShown ? 'Sembunyikan' : 'Kunci Jawaban'}</span>
+                        </button>
+                    </div>
+
+                    <h3 class="text-base font-bold text-slate-900 font-jp mb-4 leading-relaxed">
+                        ${formatFuriganaText(q.question)}
+                    </h3>
+
+                    <div class="space-y-2 mb-4">
+                        ${q.options.map((opt, optIdx) => `
+                            <div class="p-3 rounded-xl border text-sm font-jp transition ${
+                                isAnswerShown && optIdx === q.answer 
+                                    ? 'bg-emerald-50 border-emerald-400 text-emerald-900 font-bold' 
+                                    : 'bg-slate-50 border-slate-100 text-slate-700'
+                            }">
+                                ${formatFuriganaText(opt)}${isAnswerShown && optIdx === q.answer ? ' <span class="text-xs text-emerald-600 font-sans ml-2">(✓ Jawaban Benar)</span>' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div id="studyAnswerBox-${index}" class="${isAnswerShown ? 'block' : 'hidden'} p-3.5 bg-brand-50/60 rounded-xl border border-brand-100 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        <div class="font-bold text-brand-900 mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-lightbulb text-brand-600"></i> Poin Penting:
+                        </div>
+                        ${q.explanation}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function toggleSingleAnswer(index) {
+            const box = document.getElementById(`studyAnswerBox-${index}`);
+            if (box) {
+                box.classList.toggle('hidden');
+            }
+        }
+
+        function toggleAllAnswers() {
+            allAnswersVisibleInStudy = !allAnswersVisibleInStudy;
+            const btn = document.getElementById('btnToggleAnswers');
+            if (allAnswersVisibleInStudy) {
+                btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Sembunyikan Semua Jawaban';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-eye"></i> Tampilkan Semua Jawaban';
+            }
+            renderStudyList();
+        }
+    </script>
+</body>
+</html>
