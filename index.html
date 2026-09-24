@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -54,31 +55,39 @@
             background: #cbd5e1;
             border-radius: 4px;
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
 
+    <!-- Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-brand-500/20">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-brand-500/20 shrink-0">
                     <i class="fa-solid fa-utensils"></i>
                 </div>
                 <div>
                     <h1 class="font-bold text-slate-900 leading-tight text-base sm:text-lg">SSW Pengolahan Makanan</h1>
-                    <p class="text-xs text-slate-500 font-medium">特定技能1号 食品製造業 模擬試験</p>
+                    <p class="text-xs text-slate-500 font-medium hidden sm:block">特定技能1号 食品製造業 模擬試験</p>
                 </div>
             </div>
 
             <!-- Header Controls -->
             <div class="flex items-center space-x-2">
+                <button id="btnQuizMode" onclick="switchTab('quiz')" class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition bg-brand-600 text-white shadow-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-play"></i>
+                    <span class="hidden sm:inline">Mode</span> Kuis
+                </button>
                 <button id="btnStudyMode" onclick="switchTab('study')" class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center gap-1.5">
                     <i class="fa-solid fa-book-open text-brand-600"></i>
                     <span class="hidden sm:inline">Mode</span> Belajar
-                </button>
-                <button id="btnQuizMode" onclick="switchTab('quiz')" class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition bg-brand-600 text-white hover:bg-brand-700 shadow-sm flex items-center gap-1.5">
-                    <i class="fa-solid fa-circle-play"></i>
-                    <span class="hidden sm:inline">Mode</span> Kuis
                 </button>
             </div>
         </div>
@@ -86,30 +95,43 @@
 
     <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col">
 
+        <!-- Quiz Day Selector Bar -->
+        <div class="bg-white p-2 rounded-2xl border border-slate-200/80 shadow-sm mb-4 flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-400 pl-2 uppercase tracking-wider hidden sm:inline"><i class="fa-solid fa-layer-group text-brand-600"></i> Pilih Paket:</span>
+            <div class="flex-1 grid grid-cols-2 gap-2">
+                <button id="btnSelectSet1" onclick="changeQuizSet(1)" class="py-2 px-3 text-xs sm:text-sm font-bold rounded-xl transition bg-brand-50 text-brand-700 border border-brand-200 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-1"></i> Hari Pertama <span class="text-xs opacity-75 hidden sm:inline">(15 Soal)</span>
+                </button>
+                <button id="btnSelectSet2" onclick="changeQuizSet(2)" class="py-2 px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-2"></i> Hari Kedua <span class="text-xs opacity-75 hidden sm:inline">(50 Soal HACCP)</span>
+                </button>
+            </div>
+        </div>
+
         <!-- ==================== QUIZ MODE CONTAINER ==================== -->
         <div id="quizContainer" class="flex-1 flex flex-col">
             
             <!-- Quiz Start / Cover Screen -->
             <div id="quizStartCard" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm text-center my-auto flex flex-col items-center">
                 <div class="w-20 h-20 bg-brand-50 text-brand-600 rounded-3xl flex items-center justify-center text-3xl mb-4 border border-brand-100 shadow-inner">
-                    <i class="fa-solid fa-clipboard-question"></i>
+                    <i id="startCoverIcon" class="fa-solid fa-clipboard-question"></i>
                 </div>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Simulasi Kuis SSW</h2>
-                <p class="text-slate-600 max-w-md text-sm sm:text-base mb-6 leading-relaxed">
-                    Uji pemahaman Anda dengan 15 soal standar ujian Pengolahan Makanan (食品製造業). Setiap soal dilengkapi penjelasan dalam bahasa Indonesia.
+                <h2 id="startCoverTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Simulasi Kuis Hari Pertama</h2>
+                <p id="startCoverDesc" class="text-slate-600 max-w-md text-sm sm:text-base mb-6 leading-relaxed">
+                    Uji pemahaman Anda tentang higiene standar, suhu penyimpanan, dan keselamatan dasar pengolahan makanan.
                 </p>
 
                 <div class="grid grid-cols-3 gap-3 w-full max-w-md mb-8 text-center">
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
                         <span class="block text-slate-400 text-xs font-semibold mb-1">TOTAL SOAL</span>
-                        <span class="text-slate-800 font-bold text-lg">15 Soal</span>
+                        <span id="startTotalQuestions" class="text-slate-800 font-bold text-lg">15 Soal</span>
                     </div>
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
                         <span class="block text-slate-400 text-xs font-semibold mb-1">PILIHAN</span>
                         <span class="text-slate-800 font-bold text-lg">A / B / C</span>
                     </div>
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                        <span class="block text-slate-400 text-xs font-semibold mb-1">LULUS BARK</span>
+                        <span class="block text-slate-400 text-xs font-semibold mb-1">TARGET LULUS</span>
                         <span class="text-slate-800 font-bold text-lg">80%</span>
                     </div>
                 </div>
@@ -139,9 +161,12 @@
                 <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200/80 shadow-sm flex-1 flex flex-col justify-between">
                     <div>
                         <!-- Question Tag -->
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-bold mb-4 border border-brand-100">
-                            <span>Mondai</span>
-                            <span id="questionNumberBadge">#1</span>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-bold border border-brand-100">
+                                <span id="quizSetBadgeText">Kuis Hari Pertama</span>
+                                <span id="questionNumberBadge">#1</span>
+                            </div>
+                            <span class="text-xs text-slate-400 font-medium">Pilih satu jawaban yang benar</span>
                         </div>
 
                         <!-- Question Text -->
@@ -180,7 +205,7 @@
                     <!-- Dynamic -->
                 </div>
 
-                <h2 id="resultTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-1">Hasil Simulasi</h2>
+                <h2 id="resultTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-1">Hasil Evaluasi</h2>
                 <p id="resultSubtitle" class="text-slate-500 text-sm mb-6"></p>
 
                 <!-- Score Board -->
@@ -191,7 +216,7 @@
                     </div>
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
                         <span class="block text-slate-400 text-xs font-semibold mb-1">BENAR / TOTAL</span>
-                        <span id="scoreDetail" class="text-slate-900 font-bold text-xl sm:text-2xl">0 / 15</span>
+                        <span id="scoreDetail" class="text-slate-900 font-bold text-xl sm:text-2xl">0 / 0</span>
                     </div>
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 col-span-2 sm:col-span-1">
                         <span class="block text-slate-400 text-xs font-semibold mb-1">WAKTU</span>
@@ -204,7 +229,7 @@
                         <i class="fa-solid fa-rotate-right"></i> Coba Lagi
                     </button>
                     <button onclick="switchTab('study')" class="flex-1 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-book-open"></i> Review Soal
+                        <i class="fa-solid fa-book-open"></i> Pelajari Soal
                     </button>
                 </div>
             </div>
@@ -216,10 +241,10 @@
             <div class="bg-brand-900 text-white p-6 rounded-3xl shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold mb-1 flex items-center gap-2">
-                        <i class="fa-solid fa-graduation-cap text-brand-400"></i> Mode Belajar Soal & Jawaban
+                        <i class="fa-solid fa-graduation-cap text-brand-400"></i> Mode Belajar SSW Pengolahan Makanan
                     </h2>
-                    <p class="text-brand-200 text-xs sm:text-sm">
-                        Pelajari seluruh 15 soal beserta kunci jawaban resmi dan rangkuman poin penting.
+                    <p id="studyHeaderDesc" class="text-brand-200 text-xs sm:text-sm">
+                        Pelajari seluruh soal beserta kunci jawaban dan penjelasannya.
                     </p>
                 </div>
                 <button onclick="toggleAllAnswers()" id="btnToggleAnswers" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-semibold backdrop-blur transition border border-white/20 whitespace-nowrap">
@@ -237,189 +262,485 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
         <div class="max-w-5xl mx-auto px-4 text-center text-xs text-slate-500">
-            <p>Latihan Ujian Tokutei Ginou (特定技能) - Pengolahan Makanan (食品製造業)</p>
+            <p>Latihan Ujian Tokutei Ginou (特定技能1号) - Pengolahan Makanan (食品製造業)</p>
         </div>
     </footer>
 
     <script>
-        // Questions Data
-        const questionsData = [
+        // Set 1 Questions (Hari Pertama - 15 Questions)
+        const set1Questions = [
             {
                 id: 1,
                 question: "冷蔵庫（れいぞうこ）の 温度（おんど）は、食品衛生法（しょくひんえいせいほう）で 何度（なんど）以下（いか）と 決められて（きめられて）いますか。",
-                options: [
-                    "A. -15℃ 以下（いか）",
-                    "B. 0℃ 以下（いか）",
-                    "C. 10℃ 以下（いか）"
-                ],
-                answer: 2, // Index of C
-                explanation: "Menurut Undang-Undang Higiene Makanan (食品衛生法), suhu standar penyimpanan untuk <b>Reizooko (Kulkas/Lemari Pendingin)</b> adalah <b>10℃ atau lebih rendah (10℃以下)</b>."
+                options: ["A. -15℃ 以下（いか）", "B. 0℃ 以下（いか）", "C. 10℃ 以下（いか）"],
+                answer: 2,
+                explanation: "Menurut Undang-Undang Higiene Makanan (食品衛生法), suhu standar kulkas/refrigerator (冷蔵庫) adalah <b>10℃ atau lebih rendah (10℃以下)</b>."
             },
             {
                 id: 2,
                 question: "冷凍庫（れいとうこ）の 温度（おんど）は、食品衛生法（しょくひんえいせいほう）で 何度（なんど）以下（いか）と 決められて（きめられて）いますか。",
-                options: [
-                    "A. 10℃ 以下（いか）",
-                    "B. 0℃ 以下（いか）",
-                    "C. -15℃ 以下（いか）"
-                ],
-                answer: 2, // Index of C
-                explanation: "Menurut Undang-Undang Higiene Makanan (食品衛生法), suhu standar penyimpanan untuk <b>Reitooko (Freezer/Lemari Pembeku)</b> adalah <b>-15℃ atau lebih rendah (-15℃以下)</b>."
+                options: ["A. 10℃ 以下（いか）", "B. 0℃ 以下（いか）", "C. -15℃ 以下（いか）"],
+                answer: 2,
+                explanation: "Menurut Undang-Undang Higiene Makanan (食品衛生法), suhu standar freezer/pembeku (冷凍庫) adalah <b>-15℃ atau lebih rendah (-15℃以下)</b>."
             },
             {
                 id: 3,
                 question: "「未開封（みかいふう）の 加工食品（かこうしょくひん）を 決められた（きめられた）条件（じょうけん）で 保存（ほぞん）した 場合（ばあい）に、美味しく（おいしく）食べられる（たべられる）期間（きかん）の 最後の（さいごの）日（ひ）」の ことを 何（なに）と 言いますか。",
-                options: [
-                    "A. 使用期限（しようきげん）",
-                    "B. 賞味期限（しょうみきげん）",
-                    "C. 消費期限（しょうひきげん）"
-                ],
-                answer: 1, // Index of B
-                explanation: "<b>Shoomi Kigen (賞味期限)</b> adalah batas tanggal kualitas terbaik ('Best Before'). Makanan masih lezat dimakan jika belum dibuka dan disimpan sesuai petunjuk."
+                options: ["A. 使用期限（しようきげん）", "B. 賞味期限（しょうみきげん）", "C. 消費期限（しょうひきげん）"],
+                answer: 1,
+                explanation: "<b>Shoomi Kigen (賞味期限)</b> adalah batas kualitas lezat makanan (Best Before) jika kemasan belum dibuka dan disimpan sesuai aturan."
             },
             {
                 id: 4,
                 question: "食中毒（しょくちゅうどく）の 原因（げんいん）になる 可能性（かのうせい）が 高くなる（たかくなる）ため、期限（きげん）が 過ぎたら（すぎたら）絶対に（ぜったいに）使ってはいけない（つかってはいけない）ものは どれですか。",
-                options: [
-                    "A. 賞味期限（しょうみきげん）",
-                    "B. 消費期限（しょうひきげん）",
-                    "C. 製造年月日（せいぞうねんがっぴ）"
-                ],
-                answer: 1, // Index of B
-                explanation: "<b>Shoohi Kigen (消費期限)</b> adalah tanggal kedaluwarsa keamanan pangan ('Use By'). Jika tanggal ini lewat, makanan berisiko tinggi menyebabkan keracunan makanan dan <b>SAMA SEKALI TIDAK BOLEH DIGUNAKAN</b>."
+                options: ["A. 賞味期限（しょうみきげん）", "B. 消費期限（しょうひきげん）", "C. 製造年月日（せいぞうねんがっぴ）"],
+                answer: 1,
+                explanation: "<b>Shoohi Kigen (消費期限)</b> adalah tanggal konsumsi aman (Use By). Makanan yang melewati tanggal ini berisiko tinggi keracunan dan <b>DILARANG DUGUNAKAN SAMA SEKALI</b>."
             },
             {
                 id: 5,
                 question: "先に（さきに）納品（のうひん）された 原材料（げんざいりょう）から 先に（さきに）使う（つかう）管理（かんり）方法（ほうほう）を 何（なに）と 言いますか。",
-                options: [
-                    "A. 先入れ先出し（さきいれ・さきだし）",
-                    "B. 後入れ先出し（あといれ・さきだし）",
-                    "C. 整理整頓（せいりせいとん）"
-                ],
-                answer: 0, // Index of A
-                explanation: "Metode FIFO (First In, First Out) dalam bahasa Jepang disebut <b>Saki-ire Saki-dashi (先入れ先出し)</b>, yaitu menggunakan bahan baku yang datang lebih awal terlebih dahulu."
+                options: ["A. 先入れ先出し（さきいれ・さきだし）", "B. 後入れ先出し（あといれ・さきだし）", "C. 整理整頓（せいりせいとん）"],
+                answer: 0,
+                explanation: "Metode First-In First-Out (FIFO) dalam bahasa Jepang disebut <b>Saki-ire Saki-dashi (先入れ先出し)</b>."
             },
             {
                 id: 6,
                 question: "袋（ふくろ）や 容器（ようき）の 切れ端（きれはし）が 食品（しょくひん）に 混入（こんにゅう）しないように する工夫（くふう）として、正しい（ただしい）ものは どれですか。",
-                options: [
-                    "A. 同じ（おなじ）場所（ばしょ）を 何回（なんかい）も 切る（きる）",
-                    "B. 同じ（おなじ）場所（ばしょ）を 2回（にかい）以上（いじょう）切らない（きらない）",
-                    "C. 切れ端（きれはし）の 数（かず）は 確認（かくにん）しなくて よい"
-                ],
-                answer: 1, // Index of B
-                explanation: "Untuk mencegah serpihan potongan plastik/kemasan masuk ke dalam makanan, aturan utamanya adalah <b>TIDAK MENPOTONG DI TEMPAT YANG SAMA 2 KALI ATAU LEBIH (同じ場所を2回以上切らない)</b>."
+                options: ["A. 同じ（おなじ）場所（ばしょ）を 何回（なんかい）も 切る（きる）", "B. 同じ（おなじ）場所（ばしょ）を 2回（にかい）以上（いじょう）切らない（きらない）", "C. 切れ端（きれはし）の 数（かず）は 確認（かくにん）しなくて よい"],
+                answer: 1,
+                explanation: "Untuk mencegah kontaminasi potongan plastik kemasan, aturan pentingnya adalah <b>tidak memotong di titik yang sama 2 kali atau lebih (同じ場所を2回以上切らない)</b>."
             },
             {
                 id: 7,
                 question: "水道（すいどう）などの あて水（みず）で 解凍（かいとう）する 方法（ほうほう）を 何（なに）と 言いますか。",
-                options: [
-                    "A. 自然解凍（しぜんかいとう）",
-                    "B. 冷蔵庫解凍（れいぞうこかいとう）",
-                    "C. 流水解凍（りゅうすいかいとう）"
-                ],
-                answer: 2, // Index of C
-                explanation: "Proses mencairkan bahan makanan beku menggunakan air mengalir dari keran disebut <b>Ryuusui Kaitoo (流水解凍)</b>."
+                options: ["A. 自然解凍（しぜんかいとう）", "B. 冷蔵庫解凍（れいぞうこかいとう）", "C. 流水解凍（りゅうすいかいとう）"],
+                answer: 2,
+                explanation: "Proses mencairkan bahan beku menggunakan air mengalir disebut <b>Ryuusui Kaitoo (流水解凍)</b>."
             },
             {
                 id: 8,
                 question: "肉（にく）や 魚（さかな）から 出てくる（でてくる）汁（じる）（ドリップ）の 対策（たいさく）として、正しい（ただしい）ものは どれですか。",
-                options: [
-                    "A. 他の（ほかの）食品（しょくひん）と 一緒の（いっしょの）バットに 入れる",
-                    "B. 網目（あみめ）トレーなどに 入れて（いれて）解凍（かいとう）し、排水（はいすい）へ 直接（ちょくせつ）流す（ながす）",
-                    "C. ドリップは 拭き取らずに（ふきとらずに）そのまま 放置（ほうち）する"
-                ],
-                answer: 1, // Index of B
-                explanation: "Cairan tetesan daging/ikan (Drip) dapat menularkan bakteri. Cara pencegahannya adalah menempatkannya di <b>nampan berjaring (Amime Tray)</b> agar cairan langsung mengalir ke pembuangan air."
+                options: ["A. 他の（ほかの）食品（しょくひん）と 一緒の（いっしょの）バットに 入れる", "B. 網目（あみめ）トレーなどに 入れて（いれて）解凍（かいとう）し、排水（はいすい）へ 直接（ちょくせつ）流す（ながす）", "C. ドリップは 拭き取らずに（ふきとらずに）そのまま 放置（ほうち）する"],
+                answer: 1,
+                explanation: "Cairan drip daging/ikan membawa kuman. Gunakan nampan berjarat/jaring (網目トレー) agar cairan langsung mengalir keluar dan dibuang."
             },
             {
                 id: 9,
                 question: "一般的な（いっぱんてきな）食中毒菌（しょくちゅうどくきん）を 加熱（かねつ）殺菌（さっきん）する 場合（ばあい）、中心（ちゅうしん）温度（おんど）と 時間（じかん）の 基準（きじゅん）は どれですか。",
-                options: [
-                    "A. 60℃ で 10分間（じゅっぷんかん）以上（いじょう）",
-                    "B. 75℃ で 1分間（いっぷんかん）以上（いじょう）",
-                    "C. 100℃ で 5分間（ごふんかん）以上（いじょう）"
-                ],
-                answer: 1, // Index of B
-                explanation: "Standar umum pemanasan untuk membunuh bakteri keracunan makanan adalah bagian pusat (tengah) makanan mencapai <b>75℃ selama 1 menit atau lebih (75℃で1分間以上)</b>."
+                options: ["A. 60℃ で 10分間（じゅっぷんかん）以上", "B. 75℃ で 1分間（いっぷんかん）以上", "C. 100℃ で 5分間（ごふんかん）以上"],
+                answer: 1,
+                explanation: "Standar umum pemanasan kuman keracunan makanan adalah bagian pusat makanan dipanaskan pada <b>75℃ selama 1 menit atau lebih (75℃で1分間以上)</b>."
             },
             {
                 id: 10,
                 question: "ノロウイルスを 加熱（かねつ）殺菌（さっきん）する 場合（ばあい）、中心（ちゅうしん）温度（おんど）と 時間（じかん）の 基準（きじゅん）は どれですか。",
-                options: [
-                    "A. 75℃ で 1分間（いっぷんかん）以上（いじょう）",
-                    "B. 85℃～90℃ で 90秒間（びょうかん）以上（いじょう）",
-                    "C. 120℃ で 4分間（よんぷんかん）以上（いじょう）"
-                ],
-                answer: 1, // Index of B
-                explanation: "Norovirus lebih tahan panas dari bakteri biasa, sehingga membutuhkan pemanasan pusat pada suhu <b>85℃～90℃ selama 90 detik atau lebih (85℃～90℃で90秒間以上)</b>."
+                options: ["A. 75℃ で 1分間（いっぷんかん）以上", "B. 85℃～90℃ で 90秒間（びょうかん）以上", "C. 120℃ で 4分間（よんぷんかん）以上"],
+                answer: 1,
+                explanation: "Norovirus lebih tahan panas, membutuhkan pemanasan pusat pada <b>85℃～90℃ selama 90 detik atau lebih (85℃～90℃で90秒間以上)</b>."
             },
             {
                 id: 11,
                 question: "セレウス菌（きん）や ボツリヌス菌（きん）などの 芽胞（がほう）を 作る（つくる）菌（きん）を 殺菌（さっきん）する 基準（きじゅん）は どれですか。",
-                options: [
-                    "A. 75℃ で 1分間（いっぷんかん）以上（いじょう）",
-                    "B. 85℃～90℃ で 90秒間（びょうかん）以上（いじょう）",
-                    "C. 120℃ で 4分間（よんぷんかん）以上（いじょう）"
-                ],
-                answer: 2, // Index of C
-                explanation: "Bakteri pembentuk spora (芽胞 - Gahoo) seperti Bacillus cereus & Clostridium botulinum sangat kuat terhadap panas dan membutuhkan sterilasi suhu tinggi: <b>120℃ selama 4 menit atau lebih (120℃で4分間以上)</b>."
+                options: ["A. 75℃ で 1分間（いっぷんかん）以上", "B. 85℃～90℃ で 90秒間（びょうかん）以上", "C. 120℃ で 4分間（よんぷんかん）以上"],
+                answer: 2,
+                explanation: "Bakteri spora (芽胞) sangat tahan panas tinggi, membutuhkan sterilasi suhu tinggi: <b>120℃ selama 4 menit atau lebih (120℃で4分間以上)</b>."
             },
             {
                 id: 12,
                 question: "加熱（かねつ）調理（ちょうり）が 終わった（おわった）食品（しょくひん）は、中心（ちゅうしん）温度（おんど）を 30分（さんじゅっぷん）以内に（いないに）何度（なんど）まで 下げる（さげる）必要（ひつよう）が ありますか。",
-                options: [
-                    "A. 30℃",
-                    "B. 20℃",
-                    "C. 10℃"
-                ],
-                answer: 1, // Index of B
-                explanation: "Setelah dimasak, makanan harus didinginkan dengan cepat untuk melewati area suhu berkembang biaknya bakteri: dalam <b>30 menit</b> suhu pusat harus turun hingga <b>20℃</b>."
+                options: ["A. 30℃", "B. 20℃", "C. 10℃"],
+                answer: 1,
+                explanation: "Setelah dimasak, suhu pusat makanan harus diturunkan dengan cepat hingga <b>20℃ dalam waktu 30 menit</b>."
             },
             {
                 id: 13,
                 question: "加熱（かねつ）調理（ちょうり）が 終わった（おわった）食品（しょくひん）は、中心（ちゅうしん）温度（おんど）を 60分（ろくじゅっぷん）以内に（いないに）何度（なんど）まで 下げる（さげる）必要（ひつよう）が ありますか。",
-                options: [
-                    "A. 20℃",
-                    "B. 10℃",
-                    "C. 0℃"
-                ],
-                answer: 1, // Index of B
-                explanation: "Proses pendinginan berlanjut: dalam kurun waktu <b>60 menit</b>, suhu pusat makanan harus diturunkan hingga <b>10℃</b>."
+                options: ["A. 20℃", "B. 10℃", "C. 0℃"],
+                answer: 1,
+                explanation: "Langkah pendinginan selanjutnya: suhu pusat makanan harus diturunkan hingga <b>10℃ dalam waktu 60 menit</b>."
             },
             {
                 id: 14,
                 question: "加熱（かねつ）しない 生（なま）の 野菜（やさい）サラダなどの 殺菌（さっきん）に 使われる（つかわれる）薬剤（やくざい）は どれですか。",
-                options: [
-                    "A. アルコール溶液（ようえき）",
-                    "B. 次亜塩素酸（じあえんそさん）ナトリウム溶液（ようえき）",
-                    "C. 洗剤（せんざい）溶液（ようえき）"
-                ],
-                answer: 1, // Index of B
-                explanation: "Untuk mencuci dan mematikan kuman pada sayuran mentah/salad yang tidak dimasak, digunakan larutan <b>Sodium Hypochlorite / Jia-ensosannatoriumu (次亜塩素酸ナトリウム溶液)</b>."
+                options: ["A. アルコール溶液（ようえき）", "B. 次亜塩素酸（じあえんそさん）ナトリウム溶液（ようえき）", "C. 洗剤（せんざい）溶液（ようえき）"],
+                answer: 1,
+                explanation: "Sayuran mentah/salad yang tidak dimasak didisinfeksi dengan <b>Sodium Hypochlorite (次亜塩素酸ナトリウム溶液)</b>."
             },
             {
                 id: 15,
                 question: "次亜塩素酸（じあえんそさん）ナトリウム溶液（ようえき）の 濃度（のうど）が 200ppm の 場合（ばあい）、処理（しょり）時間（じかん）は 何分（なんぷん）ですか。",
-                options: [
-                    "A. 1分間（いっぷんかん）",
-                    "B. 5分間（ごふんかん）",
-                    "C. 10分間（じゅっぷんかん）"
-                ],
-                answer: 1, // Index of B
-                explanation: "Waktu perendaman larutan Sodium Hypochlorite: jika konsentrasi <b>200ppm</b> direndam selama <b>5 menit</b>. *(Catatan: Jika konsentrasi 100ppm, direndam selama 10 menit)*."
+                options: ["A. 1分間（いっぷんかん）", "B. 5分間（ごふんかん）", "C. 10分間（じゅっぷんかん）"],
+                answer: 1,
+                explanation: "Larutan Sodium Hypochlorite konsentrasi <b>200ppm</b> direndam selama <b>5 menit (5分間)</b>. (*100ppm = 10 menit*)."
             }
         ];
 
-        // App State
-        let currentTab = 'quiz'; // 'quiz', 'study'
+        // Set 2 Questions (Hari Kedua - 50 Questions with Furigana)
+        const set2Questions = [
+            {
+                id: 1,
+                question: "問（とい）1：食品（しょくひん）を 清潔（せいけつ）な 容器（ようき）に 充填（じゅうてん）・包装（ほうそう）する 主（おも）な 目的（もくてき）は 何（なに）ですか。",
+                options: ["A. 食品（しょくひん）の 見（み）た目（め）を 良（よ）くするため", "B. 外（そと）から 危害（きがい）要因（よういん）が 入（はい）ってこないようにするため", "C. 製造（せいぞう）コストを 削減（さくげん）するため"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>充填・包装の主な目的は、外部からの危害要因（微生物や異物など）の侵入を防ぎ、食品の安全と品質を保つためです。"
+            },
+            {
+                id: 2,
+                question: "問（とい）2：充填（じゅうてん）や 包装（ほうそう）に 使う（つかう）容器（ようき）や 包装（ほうそう）材料（ざいりょう）の 状態（じょうたい）で、正しい（ただしい）ものは どれですか。",
+                options: ["A. 少し（すこし）汚（よご）れていても 問題（もんだい）ない", "B. 清潔（せいけつ）でなければいけない", "C. 使用（しよう）前（まえ）に 水洗（みずあら）いすれば 清潔（せいけつ）でなくてもよい"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>食品に直接触れる容器や包装材料は常に清潔で衛生的な状態でなければなりません。"
+            },
+            {
+                id: 3,
+                question: "問（とい）3：充填（じゅうてん）や 包装（ほうそう）の 際（さい）、絶対（ぜったい）に 手（て）で 触（ふ）れてはいけない 部分（ぶぶん）は どこですか。",
+                options: ["A. ボトルの 口（くち）の 部分（ぶぶん）や キャップ、袋（ふくろ）の 内側（うちがわ）", "B. ボトルの 底（そこ）や ラベルの 外側（そとがわ）", "C. 段（だん）ボール箱（ばこ）の 外側（そとがわ）"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>食品に直接接触するボトルの口、キャップの内側、袋の内側などは手からの二次汚染を防ぐため触れてはいけません。"
+            },
+            {
+                id: 4,
+                question: "問（とい）4：出荷（しゅっか）する 加工（かこう）食品（しょくひん）の 容器（ようき）や 包装（ほうそう）に 正（ただ）しく 印字（いんじ）しなければならないものは 何（なに）ですか。",
+                options: ["A. 製造者（せいぞうしゃ）の 名前（なまえ）と 住所（じゅうしょ）", "B. 賞味（しょうみ）期限（きげん）や 消費（しょうひ）期限（きげん）", "C. 販売（はんばい）価格（かかく）と バーコード"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>消費者への安全と品質保証のため、賞味期限や消費期限を正確に印字することが義務付けられています。"
+            },
+            {
+                id: 5,
+                question: "問（とい）5：賞味（しょうみ）期限（きげん）や 消費（しょうひ）期限（きげん）の 数字（すうじ）を 間違（まちが）える ミスを 防（ふせ）ぐための 有効（ゆうこう）な 工夫（くふう）は どれですか。",
+                options: ["A. 一人（ひとり）の 作業員（さぎょういん）が すべて 責任（せきにん）を 持（も）って 行（おこな）う", "B. 印字（いんじ）された 内容（ないよう）が 正（ただ）しいかを 別（べつ）の 人（ひと）が 確認（かくにん）する", "C. パソコンを 使（つか）わずに すべて 手書（てが）きでする"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>印字ミスの発生を防ぐためには、ダブルチェック（別の担当者による確認）が有効です。"
+            },
+            {
+                id: 6,
+                question: "問（とい）6：充填（じゅうてん）や 包装（ほうそう）が 終（お）わった 容器（ようき）に対して（たいして）、どのような 検査（けんさ）を 行（おこな）うことが ありますか。",
+                options: ["A. 重量（じゅうりょう）が 正確（せいかく）かどうかの 味見（あじみ）検査（けんさ）", "B. 小（ちい）さな 穴（あな）が 開（あ）いて 空気（くうき）が もれたり 入（はい）ったりしないかの 検査（けんさ）", "C. 容器（ようき）の 色（いろ）が 褪（あ）せていないかの 色彩（しきさい）検査（けんさ）"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>密封（シール）不良による品質劣化や微生物侵入を防ぐため、ピンホール（小さな穴）の検査を行います。"
+            },
+            {
+                id: 7,
+                question: "問（とい）7：金属（きんぞく）探知機（たんちき）で 検査（けんさ）する 主（おも）な 理由（りゆう）は 何（なに）ですか。",
+                options: ["A. 食品（しょくひん）に 含まれる（ふくまれる）ビタミンを 測る（はかる）ため", "B. 硬質（こうしつ）異物（いぶつ）の 中（なか）で 金属（きんぞく）を 見つける（みつける）ことが できるから", "C. プラスチック片（へん）を 正確（せいかく）に 見つける（みつける）ため"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>金属探知機は食品に混入した金属（硬質異物）を効率的かつ確実に検知するための機器です。"
+            },
+            {
+                id: 8,
+                question: "問（とい）8：金属（きんぞく）探知機（たんちき）の 管理（かんり）において、作業（さぎょう）開始（かいし）前（まえ）に 必ず（かならず）行（おこな）うべきことは 何（なに）ですか。",
+                options: ["A. 機械（きかい）の コンセントを 抜いて（ぬいて）掃除（そうじ）する", "B. テストピースを 使って（つかって）正（ただ）しく 探知（たんち）できているか 確認（かくにん）する", "C. 機械（きかい）の スピーカーの 音量（おんりょう）を 調整（ちょうせい）する"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>金属探知機が正常に動作しているか、作業開始前にテストピースを用いて動作確認を行う必要があります。"
+            },
+            {
+                id: 9,
+                question: "問（とい）9：テストピースを 使った（つかった）金属（きんぞく）探知機（たんちき）の 確認（かくにん）は、いつ 行わなければ（おこなわなければ）なりませんか。",
+                options: ["A. 製造（せいぞう）が 始（はじ）まったときだけでよい", "B. 製造（せいぞう）が 終（お）わったときだけでよい", "C. 検査（けんさ）を 始（はじ）める 前（まえ）と、製造（せいぞう）が 終（お）わったときの 両方（りょうほう）"],
+                answer: 2,
+                explanation: "<b>正解: C</b><br>製造中の全製品の安全を保証するため、作業開始前だけでなく製造終了時（および定期的な時間ごと）にテストします。"
+            },
+            {
+                id: 10,
+                question: "問（とい）10：テストピースの 大（おお）きさは どのように 決められて（きめられて）いますか。",
+                options: ["A. すべての 工場（こうじょう）で 一律（いちりつ）に 法律（ほうりつ）で 決められて（きめられて）いる", "B. 食品（しょくひん）製造（せいぞう）工場（こうじょう）ごとに 決められて（きめられて）いる", "C. 作業員（さぎょういん）の その日（ひ）の 気分（きぶん）で 自由（じゆう）に 決める（きめる）"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>製品の特性や探知能力に応じて、工場ごとに適切なテストピースのサイズが定められています。"
+            },
+            {
+                id: 11,
+                question: "問（とい）11：金属（きんぞく）探知機（たんちき）が 正常（せいじょう）に 機能（きのう）しなかった 場合（ばあい）、最初（さいしょ）に 行（おこな）うべきことは 何（なに）ですか。",
+                options: ["A. そのまま 作業（さぎょう）を 続ける（つづける）", "B. すぐに 責任者（せきにんしゃ）へ 報告（ほうこく）する", "C. 機械（きかい）を 自分（じぶん）で 分解（ぶんかい）して 修理（しゅうり）する"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>異物検知器に異常があった場合は、自己判断せず直ちに管理責任者に報告します。"
+            },
+            {
+                id: 12,
+                question: "問（とい）12：金属（きんぞく）探知機（たんちき）が 故障（こしょう）していた 場合（ばあい）、なぜ すぐに 報告（ほうこく）しなければならないのですか。",
+                options: ["A. 機械（きかい）の 保証（ほしょう）期間（きかん）が 切れて（きれて）しまうから", "B. 故障（こしょう）した 時点（じてん）までに 作られた（つくられた）食品（しょくひん）に 金属（きんぞく）が 入って（はいって）いるかもしれないから", "C. 電気代（でんきだい）が 無駄（むだ）に かかるから"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>前回正常確認できた時点から故障発見時までに流れた製品に、金属が混入している可能性があるためです。"
+            },
+            {
+                id: 13,
+                question: "問（とい）13：X線（せん）異物（いぶつ）検出機（けんしゅつき）で 検出（けんしゅつ）できるものは どれですか。",
+                options: ["A. 石（いし）や ガラスなどの 硬質（こうしつ）異物（いぶつ）", "B. 空気（くうき）中（ちゅう）の バクテリア", "C. 食品（しょくひん）の 塩分（えんぶん）濃度（のうど）"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>X線異物検出機は金属だけでなく、骨、石、ガラスなどの密度の高い硬質異物を検出できます。"
+            },
+            {
+                id: 14,
+                question: "問（とい）14：X線（せん）異物（いぶつ）検出機（けんしゅつき）が 使われる（つかわれる）ことのある 用途（ようと）として、誤って（あやまって）いるものは どれですか。",
+                options: ["A. 原材料（げんざいりょう）の 受入れ（うけいれ）管理（かんり）", "B. 製品（せいひん）の 数量（すうりょう）不足（ふそく）や 形状（けいじょう）不良品（ふりょうひん）の チェック", "C. 食品（しょくひん）の 糖度（とうど）や 甘さ（あまさ）の 測定（そくてい）"],
+                answer: 2,
+                explanation: "<b>正解: C</b><br>X線検査装置は異物検知のほか数量・形状チェックにも使われますが、糖度や味の測定はできません。"
+            },
+            {
+                id: 15,
+                question: "問（とい）15：プラスチック片（へん）の 混入（こんにゅう）に関して（にかんして）、X線（せん）異物（いぶつ）検出機（けんしゅつき）を 使う（つかう）場合（ばあい）の 注意点（ちゅういてん）は 何（なに）ですか。",
+                options: ["A. プラスチックは X線（せん）で 見つけ（みつけ）やすいので、機械（きかい）だけに 頼れば（たよれば）よい", "B. プラスチックは X線（せん）で 見つけ（みつけ）にくいので、機械（きかい）や 設備（せつび）から 混入（こんにゅう）しないようにしなければならない", "C. プラスチックは 安全（あんぜん）なので 混入（こんにゅう）しても 検査（けんさ）する 必要（ひつよう）はない"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>軽いプラスチックはX線で検出しにくいため、そもそも製造工程で混入させない前兆管理が重要です。"
+            },
+            {
+                id: 16,
+                question: "問（とい）16：法律（ほうりつ）で 義務（ぎむ）がある 食品（しょくひん）の 微生物（びせいぶつ）検査（けんさ）について 正しい（ただしい）ものは どれですか。",
+                options: ["A. 検査員（けんさいん）が ランダムに 選んだ（えらんだ）項目（こうもく）を 調べる（しらべる）", "B. 決められた（きめられた）方法（ほうほう）で 決められた（きめられた）項目（こうもく）を 検査（けんさ）する", "C. 製造者（せいぞうしゃ）の 好み（このみ）で 項目（こうもく）を 決めて（きめて）よい"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>法令等で定められた微生物検査は、公認された検査方法および項目に従って厳格に行われます。"
+            },
+            {
+                id: 17,
+                question: "問（とい）17：食品（しょくひん）製造（せいぞう）業者（ぎょうしゃ）が 自主的（じしゅてき）に おこなう 一般的な（いっぱんてきな）微生物（びせいぶつ）検査（けんさ）に 含まれない（ふくまれない）ものは どれですか。",
+                options: ["A. 一般（いっぱん）生菌数（せいきんすう）", "B. 大腸菌（だいちょうきん）・大腸菌群（だいちょうきんぐん）", "C. 金（きん）の 含有量（がんゆうりょう）"],
+                answer: 2,
+                explanation: "<b>正解: C</b><br>微生物検査では一般生菌数や大腸菌群などを測定します。金の含有量は微生物検査ではありません。"
+            },
+            {
+                id: 18,
+                question: "問（とい）18：自主的な（じしゅてきな）微生物（びせいぶつ）検査（けんさ）で 検査（けんさ）されることのある 菌（きん）として、正しい（ただしい）ものは どれですか。",
+                options: ["A. 乳酸菌（にゅうさんきん）だけ", "B. 黄色（おうしょく）ブドウ球菌（きゅうきん）、サルモネラ属菌（ぞくきん）、カンピロバクター属菌（ぞくきん）", "C. 納豆菌（なっとうきん）のみ"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>食中毒の原因となる主要な病原菌（黄色ブドウ球菌、サルモネラ、カンピロバクター等）が検査対象となります。"
+            },
+            {
+                id: 19,
+                question: "問（とい）19：検査（けんさ）に 合格（ごうかく）した 食品（しょくひん）は、出荷（しゅっか）まで どこに 保管（ほかん）しますか。",
+                options: ["A. 工場（こうじょう）の 外（そと）の 駐車場（ちゅうしゃじょう）", "B. 製品（せいひん）倉庫（そうこ）", "C. 作業員（さぎょういん）の ロッカー"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>出荷前の合格製品は衛生的に管理された「製品倉庫」に適切に保管します。"
+            },
+            {
+                id: 20,
+                question: "問（とい）20：製品（せいひん）の 保管（ほかん）温度（おんど）などの 条件（じょうけん）は どうやって 決められて（きめられて）いますか。",
+                options: ["A. すべての 食品（しょくひん）で 一律（いちりつ）20度（ど）に 設定（せってい）されている", "B. 食品（しょくひん）ごとに 決まって（きまって）いる", "C. 季節（きせつ）ごとに 日替わり（ひがわり）で 変更（へんこう）される"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>冷蔵、冷凍、常温など、食品ごとの特性に応じた保存基準が設定されています。"
+            },
+            {
+                id: 21,
+                question: "問（とい）21：出荷（しゅっか）した 製品（せいひん）に クレームが 来た（きた）場合（ばあい）、なぜ 製品（せいひん）サンプルを 保管（ほかん）しておくのですか。",
+                options: ["A. 美味しさ（おいしさ）を 再確認（さいかくにん）するため", "B. 同じ（おなじ）時期（じき）に 製造（せいぞう）した 製品（せいひん）に 同じ（おなじ）問題（もんだい）がないかを 調べる（しらべる）ため", "C. 新しい（あたらしい）商品（しょうひん）の 開発（かいはつ）の 参考（さんこう）に するため"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>万が一クレームが発生した際、同一ロッドの保持サンプルを調査して原因究明に役立てるためです。"
+            },
+            {
+                id: 22,
+                question: "問（とい）22：製品（せいひん）サンプルの 保管（ほかん）方法（ほうほう）は どのように 行われますか（おこなわれますか）。",
+                options: ["A. 製品（せいひん）の 中（なか）から 一定（いってい）の 割合（わりあい）で サンプルを 抜き出して（ぬきだして）保管（ほかん）する", "B. 売れ残った（うれのこった）もの すべてを 保管（ほかん）する", "C. サンプルは 保管（ほかん）しなくてもよい"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>製造ロットごとに決まった割合で製品を抜き取り、所定期間保管します。"
+            },
+            {
+                id: 23,
+                question: "問（とい）23：「先入れ（さきいれ）、先出し（さきだし）」とは どのような 出荷（しゅっか）方法（ほうほう）ですか。",
+                options: ["A. 新しく（あたらしく）作った（つくった）製品（せいひん）を 先（さき）に 出荷（しゅっか）すること", "B. 先（さき）に 製品（せいひん）倉庫（そうこ）に 入れた（いれた）食品（しょくひん）から 先（さき）に 出荷（しゅっか）すること", "C. ランダムに 選んだ（えらんだ）製品（せいひん）から 出荷（しゅっか）すること"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>製造・入庫日時の古い製品から順に出荷し、期限切れを防ぐ管理法です。"
+            },
+            {
+                id: 24,
+                question: "問（とい）24：輸送（ゆそう）中（ちゅう）の 食品（しょくひん）管理（かんり）について 正しい（ただしい）ものは どれですか。",
+                options: ["A. 品質（ひんしつ）が 劣化（れっか）しないよう 食品（しょくひん）ごとに 決められた（きめられた）温度（おんど）で 輸送（ゆそう）する", "B. 常温（じょうおん）であれば どんな 食品（しょくひん）も 一緒（いっしょ）に 運んで（はこんで）よい", "C. 輸送（ゆそう）中（ちゅう）の 温度（おんど）管理（かんり）は 特に（とくに）気（き）に する 必要（ひつよう）はない"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>工場出荷後も店舗到着まで適切な温度帯（定温・冷蔵・冷凍）を維持することが重要です。"
+            },
+            {
+                id: 25,
+                question: "問（とい）25：HACCP（ハサップ）による 衛生（えいせい）管理（かんり）が 必要（ひつよう）とされる 理由（りゆう）は どれですか。",
+                options: ["A. 一般（いっぱん）衛生（えいせい）管理（かんり）だけでは 危害（きがい）要因（よういん）を 含まない（ふくまない）ように 製造（せいぞう）できない 食品（しょくひん）が あるから", "B. 法律（ほうりつ）で ただの 形式（けいしき）として 義務（ぎむ）付けられて（つけられて）いるから", "C. 機械（きかい）の 数（かず）を 増やす（ふやす）ため"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>一般的な環境衛生管理（PP）に加え、特定工程での重点管理（CCP）が必要なためHACCPを導入します。"
+            },
+            {
+                id: 26,
+                question: "問（とい）26：HACCP（ハサップ）の 最初の（さいしょの）ステップ①である「危害（きがい）要因（よういん）分析（ぶんせき）（ハザード分析（ぶんせき））」とは 何（なに）を することですか。",
+                options: ["A. 原材料（げんざいりょう）や 製造（せいぞう）工程（こうてい）を 調べて（しらべて）、どのような 危害（きがい）要因（よういん）が あり どう 管理（かんり）すべきかを 分析（ぶんせき）すること", "B. 工場（こうじょう）の 利益（りえき）を 計算（けいさん）すること", "C. 従業員（じゅうぎょういん）の 健康（けんこう）状態（じょうたい）を チェックすること"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>ハザード分析（HA）は、製品における生物的・化学的・物理的危害要因を特定・評価する作業です。"
+            },
+            {
+                id: 27,
+                question: "問（とい）27：HACCP（ハサップ）の ステップ②で 決定（けってい）する「重要（じゅうよう）管理（かんり）点（てん）」の 英語（えいご）の 略称（りゃくしょう）は 何（なに）ですか。",
+                options: ["A. HACCP（ハサップ）", "B. CCP（シーシーピー）", "C. ISO（アイエスオー）"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>重要管理点は Critical Control Point の頭文字をとって <b>CCP</b> と呼ばれます。"
+            },
+            {
+                id: 28,
+                question: "問（とい）28：重要（じゅうよう）管理（かんり）点（てん）（CCP）に 関連して（かんれんして）正しい（ただしい）記述（きじゅつ）は どれですか。",
+                options: ["A. 重要（じゅうよう）管理（かんり）点（てん）は どの 食品（しょくひん）でも 必ず（かならず）1つだけでなければならない", "B. 重要（じゅうよう）管理（かんり）点（てん）が 一つ（ひとつ）ではなく、二つ（ふたつ）以上（いじょう）に なる 食品（しょくひん）も ある", "C. 重要（じゅうよう）管理（かんり）点（てん）は 存在（そんざい）しなくてもよい"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>加熱工程、金属検出工程など、製品や製造工程に応じて複数のCCPが存在する場合があります。"
+            },
+            {
+                id: 29,
+                question: "問（とい）29：HACCP（ハサップ）の ステップ③で 行う（おこなう）「モニタリング」とは 何（なに）を することですか。",
+                options: ["A. 一般（いっぱん）衛生（えいせい）管理（かんり）と 重要（じゅうよう）管理（かんり）点（てん）が 正しく（ただしく）実行（じっこう）されているかを 監視（かんし）すること", "B. 製品（せいひん）の テレビCMを 監視（かんし）すること", "C. 作業員（さぎょういん）の 挨拶（あいさつ）を 監視（かんし）すること"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>CCPが管理基準（CL）を満たして連続的・定期的に適切に管理されているかを観察・測定することです。"
+            },
+            {
+                id: 30,
+                question: "問（とい）30：モニタリングの 結果（けっか）、正しく（ただしく）実行（じっこう）されなかった 場合は（ばあいは）どうしなければなりませんか。",
+                options: ["A. そのまま 何（なに）も しないで すぐ 出荷（しゅっか）する", "B. その 食品（しょくひん）を 出荷（しゅっか）させない", "C. 従業員（じゅうぎょういん）を 全員（ぜんいん）クビにする"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>基準を満たしていない疑いのある食品は不適合品として隔離し、出荷を止めます。"
+            },
+            {
+                id: 31,
+                question: "問（とい）31：HACCP（ハサップ）の 7原則（げんそく）の「原則（げんそく）1」は 何（なに）ですか。",
+                options: ["A. 記録（きろく）", "B. 危害（きがい）要因（よういん）分析（ぶんせき）（ハザード分析（ぶんせき））", "C. 改善（かいぜん）措置（そち）"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>HACCP原則1は「危害要因分析（ハザード分析）の実施」です。"
+            },
+            {
+                id: 32,
+                question: "問（とい）32：HACCP（ハサップ）の「原則（げんそく）2」の 内容（ないよう）として 正しい（ただしい）ものは どれですか。",
+                options: ["A. 重要（じゅうよう）管理（かんり）点（てん）の 決定（けってい）", "B. 管理（かんり）基準（きじゅん）の 設定（せってい）", "C. 検証（けんしょう）方法（ほうほう）の 設定（せってい）"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>HACCP原則2は「重要管理点（CCP）の決定」です。"
+            },
+            {
+                id: 33,
+                question: "問（とい）33：HACCP（ハサップ）の「原則（げんそく）3」で 設定（せってい）するものは 何（なに）ですか。",
+                options: ["A. 管理（かんり）基準（きじゅん）", "B. 工場（こうじょう）の 外観（がいかん）", "C. 給料（きゅうりょう）の 基準（きじゅん）"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>HACCP原則3は「管理基準（CL: Critical Limit）の設定」です。"
+            },
+            {
+                id: 34,
+                question: "問（とい）34：HACCP（ハサップ）の「原則（げんそく）4」の「監視（かんし）（モニタリング）」で 行う（おこなう）ことは どれですか。",
+                options: ["A. 管理（かんり）の 状況（じょうきょう）を 監視（かんし）する 方法（ほうほう）を 決める（きめる）こと", "B. 製品（せいひん）の 味（あじ）を 毎日（まいにち）テイスティングすること", "C. 機械（きかい）の 掃除（そうじ）の スケジュールを 決める（きめる）こと"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>HACCP原則4は「モニタリング方法の設定・実施」です。"
+            },
+            {
+                id: 35,
+                question: "問（とい）35：HACCP（ハサップ）の「原則（げんそく）5」の「改善（かいぜん）措置（そち）の 設定（せってい）」で 決めるべき（きめるべき）内容（ないよう）は どれですか。",
+                options: ["A. 基準（きじゅん）を 逸脱（いつだつ）した 場合（ばあい）の 対応（たいおう）や、作った（つくった）食品（しょくひん）の 扱い（あつかい）を 決める（きめる）こと", "B. 新しい（あたらしい）機械（きかい）の 購入（こうにゅう）計画（けいかく）を 立てる（たてる）こと", "C. 工場（こうじょう）の 床（ゆか）を 新しく（あたらしく）張り替える（はりかえる）こと"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>HACCP原則5は、CLを逸脱した際の「改善措置（Corrective Action）の設定」です。"
+            },
+            {
+                id: 36,
+                question: "問（とい）36：HACCP（ハサップ）の「原則（げんそく）6」で 行う（おこなう）「検証（けんしょう）方法（ほうほう）の 設定（せってい）」に 含まれない（ふくまれない）ものは どれですか。",
+                options: ["A. 決定（けってい）した やり方が 危害（きがい）要因（よういん）の 除去（じょきょ）に 有効（ゆうこう）か 確認（かくにん）する", "B. 計画（けいかく）通り（どおり）実行（じっこう）されているか 確認（かくにん）する 方法（ほうほう）を 決める（きめる）", "C. 従業員（じゅうぎょういん）の 中（なか）から 優秀（ゆうしゅう）な 人（ひと）を 表彰（ひょうしょう）する 基準（きじゅん）を 決める（きめる）"],
+                answer: 2,
+                explanation: "<b>正解: C</b><br>原則6（検証）はHACCPシステムが機能しているかを評価する手続であり、表彰基準は含みません。"
+            },
+            {
+                id: 37,
+                question: "問（とい）37：HACCP（ハサップ）の「原則（げんそく）7」の「記録（きろく）」として 正しい（ただしい）ものは どれですか。",
+                options: ["A. 決めた（きめた）内容（ないよう）や 確認（かくにん）した 結果（けっか）を 文書（ぶんしょ）で 記録（きろく）する", "B. 頭（あたま）の 中（なか）だけで 記憶（きおく）しておけばよい", "C. 個人（こじん）の SNSに 作業（さぎょう）内容（ないよう）を 投稿（とうこう）する"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>HACCP原則7は「記録および文書化」です。適切な管理が行われた証拠として保管します。"
+            },
+            {
+                id: 38,
+                question: "問（とい）38：食品（しょくひん）を 製造（せいぞう）する 際（さい）に 重要（じゅうよう）管理（かんり）点（てん）と なる 代表的な（だいひょうてきな）工程（こうてい）の 数（かず）として 正しい（ただしい）ものは いくつですか。",
+                options: ["A. 3つ", "B. 5つ", "C. 10個（こ）"],
+                answer: 1,
+                explanation: "<b>正解: B</b><br>一般的な食品製造では主に5つの代表的なCCPパターン（加熱、冷却、金属検出等）が示されます。"
+            },
+            {
+                id: 39,
+                question: "問（とい）39：代表的な（だいひょうてきな）5つの 重要（じゅうよう）管理（かんり）点（てん）の 工程（こうてい）に 含まれない（ふくまれない）ものは どれですか。",
+                options: ["A. 加熱（かねつ）殺菌（さっきん）", "B. 金属（きんぞく）探知機（たんちき）", "C. 製品（せいひん）の パッケージデザインの 決定（けってい）"],
+                answer: 2,
+                explanation: "<b>正解: C</b><br>パッケージデザイン決定はデザインに関わる作業であり、衛生管理のCCPではありません。"
+            },
+            {
+                id: 40,
+                question: "問（とい）40：「管理（かんり）基準（きじゅん）からの 逸脱（いつだつ）」とは どういう 状態（じょうたい）を 指しますか（さしますか）。",
+                options: ["A. 決めた（きめた）管理（かんり）基準（きじゅん）が 実際に（じっさいに）守られて（まもられて）いないこと", "B. 工場（こうじょう）の メンバーが 全員（ぜんいん）遅刻（ちこく）したこと", "C. 製造（せいぞう）ラインの 電気（でんき）が 消えた（きえた）こと"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>加熱温度不足やコンベア速度異常など、設定した許容限界（CL）から外れた状態を指します。"
+            },
+            {
+                id: 41,
+                question: "問（とい）41：重要（じゅうよう）管理（かんり）点（てん）が 管理（かんり）基準（きじゅん）から 逸脱（いつだつ）したことを 知った（しった）とき、最初（さいしょ）に 行（おこな）うべきことは 何（なに）ですか。",
+                options: ["A. すぐに 責任者（せきにんしゃ）へ 報告（ほうこく）すること", "B. 自分（じぶん）で こっそり 隠蔽（いんぺい）すること", "C. 明日（あした）まで 放置（ほうち）すること"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>逸脱を発見した場合は、速やかに現場の責任者へ報告して指示を仰ぎます。"
+            },
+            {
+                id: 42,
+                question: "問（とい）42：管理（かんり）基準（きじゅん）から 逸脱（いつだつ）した場合（ばあい）の 改善（かいぜん）措置（そち）を 行う（おこなう）ときの 注意（ちゅうい）事項（じこう）として 正しい（ただしい）ものは どれですか。",
+                options: ["A. 必ず（かならず）責任者（せきにんしゃ）の 指示（しじ）に 従う（したがう）こと", "B. 自分（じぶん）の 判断（はんだん）だけで 勝手（かって）に 行う（おこなう）こと", "C. 誰（だれ）にも 相談（そうだん）せず 無視（むし）すること"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>不適合品の処置や原因究明は、定められた改善措置マニュアルおよび責任者の指示に従います。"
+            },
+            {
+                id: 43,
+                question: "問（とい）43：「改善（かいぜん）措置（そち）」の 定義（ていぎ）として 正しい（ただしい）ものは どれですか。",
+                options: ["A. 逸脱（いつだつ）への 対応（たいおう）、再発（さいはつ）防止（ぼうし）、および 作って（つくって）しまった 食品（しょくひん）の 処置（しょち）を 決める（きめる）こと", "B. 工場（こうじょう）の 壁（かべ）を 新しく（あたらしく）塗り直す（ぬりなおす）こと", "C. 新しい（あたらしい）制服（せいふく）を 支給（しきゅう）すること"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>改善措置には「該当製品の措置」「正常状態への復帰」「再発防止策の実施」が含まれます。"
+            },
+            {
+                id: 44,
+                question: "問（とい）44：コンベアの 速度（そくど）が 速すぎて（はやすぎて）中心（ちゅうしん）温度（おんど）が 低かった（ひくかった）場合（ばあい）の 改善（かいぜん）措置（そち）として 適切な（てきせつな）ものは どれですか。",
+                options: ["A. コンベアの 速度（そくど）を 遅く（おそく）するように 調整（ちょうせい）し、加熱（かねつ）不足（ふそく）のものを 廃棄（はいき）すること", "B. そのままの 速度（そくど）で 出荷（しゅっか）を 急ぐ（いそぐ）こと", "C. コンベアの 電源（でんげん）を切って（きって）放置（ほうち）すること"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>コンベア速度を正常に戻し、加熱不足となった対象品は非出荷・廃棄等の処置をとります。"
+            },
+            {
+                id: 45,
+                question: "問（とい）45：記録（きろく）を 残す（のこす）ことの 最大（さいだい）の メリットは 何（なに）ですか。",
+                options: ["A. 適切な（てきせつな）管理（かんり）手段（しゅだん）で 食品（しょくひん）が 製造（せいぞう）されたことを 検証（けんしょう）できること", "B. ペーパーレス化（か）を 進める（すすめ）ことが できること", "C. 書類（しょるい）が 多い（おおい）と 工場（こうじょう）が 広く（ひろく）見える（みえる）こと"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>記録は、製品が安全なプロセスで確実に製造されたことを後から証明・検証するための必須事項です。"
+            },
+            {
+                id: 46,
+                question: "問（とい）46：記録（きろく）の 手順（てじゅん）について、あらかじめ 決めなければ（きめなければ）ならないことは どれですか。",
+                options: ["A. いつ、誰（だれ）が、どのように 記録（きろく）するのか", "B. どんな ペンを 使って（つかって）書く（かく）のか", "C. 記録（きろく）用紙（ようし）の 紙（かみ）の 色（いろ）は 何色（なにいろ）に するのか"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>記録の標準化のために、記録のタイミング（いつ）、担当者（誰が）、記録方法（どのように）を明確にします。"
+            },
+            {
+                id: 47,
+                question: "問（とい）47：温度（おんど）や 濃度（のうど）、時間（じかん）を 記録（きろく）する タイミングとして 正しい（ただしい）ものは どれですか。",
+                options: ["A. はかったとき、確認（かくにん）したときに すぐ 記録（きろく）する", "B. 休憩（きゅうけい）時間（じかん）に まとめて 思い出し（おもいだし）ながら 書く（かく）", "C. その日（ひ）の 業務（ぎょうむ）が すべて 終わった（おわった）退勤（たいきん）間際（まぎわ）に 書く（かく）"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>改ざんや記憶違いを防ぐため、測定・確認した「その場ですぐ」記録することが徹底されます。"
+            },
+            {
+                id: 48,
+                question: "問（とい）48：記録（きろく）に関して（にかんして）「絶対に（ぜったいに）やってはいけないこと」として 挙げられて（あげられて）いるものは どれですか。",
+                options: ["A. 後（あと）で まとめて 記録（きろく）すること、はかる 前（まえ）に 記録（きろく）すること、事実（じじつ）でないことを 記録（きろく）すること", "B. ボールペンを 使って（つかって）丁寧（ていねい）に 文字（もじ）を 書く（かく）こと", "C. 決まった（きまった）フォーマット通り（どおり）に 記入（きにゅう）すること"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>事後まとめての記録、事前記入、虚偽（データの改ざん）記入は絶対に行ってはいけません。"
+            },
+            {
+                id: 49,
+                question: "問（とい）49：「いつもこうだから」という 理由（りゆう）で 行って（おこなって）はいけない 記録（きろく）の 仕方は（しかたは）どれですか。",
+                options: ["A. 確認（かくにん）していないのに 記録（きろく）すること（事前（じぜん）・推測（すいそく）の 記録（きろく））", "B. 実際の（じっさいの）数値（すうち）を 正確（せいかく）に 測って（はかって）書く（かく）こと", "C. 時間（じかん）通り（どおり）に その場（ば）で 書く（かく）こと"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>測定・確認を行わずに推測で書き込む行為（空記入）は重大な違反です。"
+            },
+            {
+                id: 50,
+                question: "問（とい）50：記録（きろく）した 内容（ないよう）について、従業員（じゅうぎょういん）が やってはならないことは どれですか。",
+                options: ["A. 自分（じぶん）だけの 判断（はんだん）で 勝手（かって）に 数値（すうち）を 修正（しゅうせい）すること", "B. 間違い（まちがい）に 気づいた（きづいた）とき 責任者（せきにんしゃ）に 相談（そうだん）すること", "C. 決められた（きめられた）手順（てじゅん）通り（どおり）に 保管（ほかん）すること"],
+                answer: 0,
+                explanation: "<b>正解: A</b><br>記録の修正が必要な場合は勝手に書き直さず、所定の訂正ルール（二重線＋訂正印など）や責任者の承認に従います。"
+            }
+        ];
+
+        // State Management
+        let currentSetIndex = 1; // 1 or 2
+        let currentQuestions = set1Questions;
+        let currentTab = 'quiz';
         let currentQuestionIndex = 0;
-        let userAnswers = new Array(questionsData.length).fill(null);
+        let userAnswers = [];
         let quizTimerSeconds = 0;
         let timerInterval = null;
         let allAnswersVisibleInStudy = false;
 
-        // Audio Context for sound effects
+        // Sound System
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(type) {
             try {
@@ -446,14 +767,51 @@
             } catch (e) {}
         }
 
-        // Convert Kanji(furigana) -> <ruby>Kanji<rt>furigana</rt></ruby>
+        // Convert Furigana Format
         function formatFuriganaText(text) {
             return text.replace(/([一-龠々ヶぁ-んァ-ヴa-zA-R0-9~～\-ー]+)（([^）]+)）/g, (match, word, furi) => {
                 return `<ruby>${word}<rt>${furi}</rt></ruby>`;
             });
         }
 
-        // Navigation Tab Switcher
+        // Change Active Quiz Set (Set 1 vs Set 2)
+        function changeQuizSet(setNum) {
+            currentSetIndex = setNum;
+            if (setNum === 1) {
+                currentQuestions = set1Questions;
+                document.getElementById('btnSelectSet1').className = "py-2 px-3 text-xs sm:text-sm font-bold rounded-xl transition bg-brand-50 text-brand-700 border border-brand-200 flex items-center justify-center gap-1.5 shadow-sm";
+                document.getElementById('btnSelectSet2').className = "py-2 px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1.5";
+                
+                document.getElementById('startCoverTitle').innerText = "Simulasi Kuis Hari Pertama";
+                document.getElementById('startCoverDesc').innerText = "Uji pemahaman Anda tentang higiene standar, suhu penyimpanan, dan keselamatan dasar pengolahan makanan.";
+                document.getElementById('startCoverIcon').className = "fa-solid fa-clipboard-question";
+                document.getElementById('startTotalQuestions').innerText = "15 Soal";
+                document.getElementById('quizSetBadgeText').innerText = "Kuis Hari Pertama";
+                document.getElementById('studyHeaderDesc').innerText = "Pelajari 15 soal Kuis Hari Pertama beserta kunci jawaban dan penjelasannya.";
+            } else {
+                currentQuestions = set2Questions;
+                document.getElementById('btnSelectSet2').className = "py-2 px-3 text-xs sm:text-sm font-bold rounded-xl transition bg-brand-50 text-brand-700 border border-brand-200 flex items-center justify-center gap-1.5 shadow-sm";
+                document.getElementById('btnSelectSet1').className = "py-2 px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1.5";
+                
+                document.getElementById('startCoverTitle').innerText = "Simulasi Kuis Hari Kedua";
+                document.getElementById('startCoverDesc').innerText = "Uji pemahaman Anda mengenai HACCP, Pengisian, Pengemasan, serta Inspeksi Bakteri & Logam (充填・包装・検査). Dilengkapi Furigana cara baca Kanji.";
+                document.getElementById('startCoverIcon').className = "fa-solid fa-shield-halved";
+                document.getElementById('startTotalQuestions').innerText = "50 Soal";
+                document.getElementById('quizSetBadgeText').innerText = "Kuis Hari Kedua (HACCP & Furigana)";
+                document.getElementById('studyHeaderDesc').innerText = "Pelajari 50 soal Kuis Hari Kedua (HACCP & Inspeksi) yang dilengkapi Furigana beserta penjelasan jawabannya.";
+            }
+
+            // Reset screens
+            document.getElementById('quizStartCard').classList.remove('hidden');
+            document.getElementById('quizActiveCard').classList.add('hidden');
+            document.getElementById('quizResultCard').classList.add('hidden');
+            clearInterval(timerInterval);
+
+            if (currentTab === 'study') {
+                renderStudyList();
+            }
+        }
+
         function switchTab(tab) {
             currentTab = tab;
             const quizContainer = document.getElementById('quizContainer');
@@ -477,14 +835,14 @@
 
         function startQuiz() {
             currentQuestionIndex = 0;
-            userAnswers = new Array(questionsData.length).fill(null);
+            userAnswers = new Array(currentQuestions.length).fill(null);
             quizTimerSeconds = 0;
 
             document.getElementById('quizStartCard').classList.add('hidden');
             document.getElementById('quizResultCard').classList.add('hidden');
             document.getElementById('quizActiveCard').classList.remove('hidden');
 
-            // Start timer
+            // Timer
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 quizTimerSeconds++;
@@ -497,18 +855,18 @@
         }
 
         function renderCurrentQuestion() {
-            const q = questionsData[currentQuestionIndex];
+            const q = currentQuestions[currentQuestionIndex];
             
             // Progress Bar & Badge
             document.getElementById('questionNumberBadge').innerText = `#${currentQuestionIndex + 1}`;
-            document.getElementById('quizProgressText').innerText = `Soal ${currentQuestionIndex + 1} dari ${questionsData.length}`;
-            const progressPercent = ((currentQuestionIndex + 1) / questionsData.length) * 100;
+            document.getElementById('quizProgressText').innerText = `Soal ${currentQuestionIndex + 1} dari ${currentQuestions.length}`;
+            const progressPercent = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
             document.getElementById('quizProgressBar').style.width = `${progressPercent}%`;
 
             // Question Text
             document.getElementById('questionText').innerHTML = formatFuriganaText(q.question);
 
-            // Render Options
+            // Options List
             const optionsContainer = document.getElementById('optionsContainer');
             optionsContainer.innerHTML = '';
 
@@ -566,12 +924,11 @@
                 document.getElementById('btnNext').disabled = true;
             }
 
-            // Prev Button state
+            // Navigation State
             document.getElementById('btnPrev').disabled = currentQuestionIndex === 0;
 
-            // Change Next button text on last question
             const btnNextSpan = document.getElementById('btnNext').querySelector('span');
-            if (currentQuestionIndex === questionsData.length - 1) {
+            if (currentQuestionIndex === currentQuestions.length - 1) {
                 btnNextSpan.innerText = "Lihat Hasil";
             } else {
                 btnNextSpan.innerText = "Lanjut";
@@ -579,10 +936,10 @@
         }
 
         function selectOption(index) {
-            if (userAnswers[currentQuestionIndex] !== null) return; // Prevent changing after selected
+            if (userAnswers[currentQuestionIndex] !== null) return;
             
             userAnswers[currentQuestionIndex] = index;
-            const q = questionsData[currentQuestionIndex];
+            const q = currentQuestions[currentQuestionIndex];
 
             if (index === q.answer) {
                 playSound('correct');
@@ -594,7 +951,7 @@
         }
 
         function nextQuestion() {
-            if (currentQuestionIndex < questionsData.length - 1) {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
                 currentQuestionIndex++;
                 renderCurrentQuestion();
             } else {
@@ -615,16 +972,16 @@
             // Calculate Score
             let correctCount = 0;
             userAnswers.forEach((ans, i) => {
-                if (ans === questionsData[i].answer) correctCount++;
+                if (ans === currentQuestions[i].answer) correctCount++;
             });
 
-            const scorePercentage = Math.round((correctCount / questionsData.length) * 100);
+            const scorePercentage = Math.round((correctCount / currentQuestions.length) * 100);
 
             document.getElementById('quizActiveCard').classList.add('hidden');
             document.getElementById('quizResultCard').classList.remove('hidden');
 
             document.getElementById('scorePercent').innerText = `${scorePercentage}%`;
-            document.getElementById('scoreDetail').innerText = `${correctCount} / ${questionsData.length}`;
+            document.getElementById('scoreDetail').innerText = `${correctCount} / ${currentQuestions.length}`;
 
             const mins = Math.floor(quizTimerSeconds / 60).toString().padStart(2, '0');
             const secs = (quizTimerSeconds % 60).toString().padStart(2, '0');
@@ -639,12 +996,12 @@
                 badgeIcon.className = "w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-4 bg-emerald-100 text-emerald-600 border-4 border-emerald-200 shadow-emerald-200";
                 badgeIcon.innerHTML = '<i class="fa-solid fa-trophy"></i>';
                 resultTitle.innerText = "Lulus! (合格)";
-                resultSubtitle.innerText = "Luar biasa! Pemahaman Anda tentang higienis pengolahan makanan sangat baik.";
+                resultSubtitle.innerText = `Sangat Baik! Pemahaman Anda pada ${currentSetIndex === 1 ? 'Kuis Hari Pertama' : 'Kuis Hari Kedua (HACCP)'} sudah mencapai standar kelulusan.`;
             } else {
                 badgeIcon.className = "w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-4 bg-amber-100 text-amber-600 border-4 border-amber-200 shadow-amber-200";
-                badgeIcon.innerHTML = '<i class="fa-solid fa-seedling"></i>';
+                badgeIcon.innerHTML = '<i class="fa-solid fa-wheat-awn"></i>';
                 resultTitle.innerText = "Perlu Latihan Lagi";
-                resultSubtitle.innerText = "Jangan berkecil hati! Pelajari kembali materi pada Mode Belajar dan coba lagi.";
+                resultSubtitle.innerText = "Jangan berkecil hati. Buka Mode Belajar untuk meninjau materi dan coba kembali kuis ini.";
             }
         }
 
@@ -652,7 +1009,7 @@
             const container = document.getElementById('studyList');
             container.innerHTML = '';
 
-            questionsData.forEach((q, index) => {
+            currentQuestions.forEach((q, index) => {
                 const card = document.createElement('div');
                 card.className = "bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm";
 
@@ -661,7 +1018,7 @@
                 card.innerHTML = `
                     <div class="flex items-start justify-between gap-3 mb-3">
                         <span class="px-2.5 py-1 bg-brand-50 text-brand-700 rounded-lg text-xs font-bold border border-brand-100">
-                            Soal #${q.id}
+                            ${currentSetIndex === 1 ? 'Hari Pertama' : 'Hari Kedua'} - Soal #${q.id}
                         </span>
                         <button onclick="toggleSingleAnswer(${index})" class="text-xs font-semibold text-brand-600 hover:text-brand-800 flex items-center gap-1">
                             <i class="fa-solid ${isAnswerShown ? 'fa-eye-slash' : 'fa-eye'}"></i>
@@ -687,7 +1044,7 @@
 
                     <div id="studyAnswerBox-${index}" class="${isAnswerShown ? 'block' : 'hidden'} p-3.5 bg-brand-50/60 rounded-xl border border-brand-100 text-xs sm:text-sm text-slate-700 leading-relaxed">
                         <div class="font-bold text-brand-900 mb-1 flex items-center gap-1.5">
-                            <i class="fa-solid fa-lightbulb text-brand-600"></i> Poin Penting:
+                            <i class="fa-solid fa-lightbulb text-brand-600"></i> Penjelasan Resmi:
                         </div>
                         ${q.explanation}
                     </div>
@@ -714,6 +1071,9 @@
             }
             renderStudyList();
         }
+
+        // Initialize Default View
+        changeQuizSet(1);
     </script>
 </body>
 </html>
