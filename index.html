@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>  
 <html lang="id">  
 <head>  
@@ -98,7 +97,7 @@
         <!-- Quiz Day Selector Bar -->  
         <div class="bg-white p-2 rounded-2xl border border-slate-200/80 shadow-sm mb-4 flex items-center gap-2">  
             <span class="text-xs font-bold text-slate-400 pl-2 uppercase tracking-wider hidden sm:inline"><i class="fa-solid fa-layer-group text-brand-600"></i> Pilih Paket:</span>  
-            <div class="flex-1 grid grid-cols-3 gap-1.5 sm:gap-2">  
+            <div class="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">  
                 <button id="btnSelectSet1" onclick="changeQuizSet(1)" class="py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition bg-brand-50 text-brand-700 border border-brand-200 flex items-center justify-center gap-1 sm:gap-1.5">  
                     <i class="fa-solid fa-1"></i> Hari Pertama <span class="text-xs opacity-75 hidden md:inline">(15 Soal)</span>  
                 </button>  
@@ -107,6 +106,9 @@
                 </button>  
                 <button id="btnSelectSet3" onclick="changeQuizSet(3)" class="py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1 sm:gap-1.5">  
                     <i class="fa-solid fa-3"></i> Hari Ketiga <span class="text-xs opacity-75 hidden md:inline">(30 Soal K3)</span>  
+                </button>  
+                <button id="btnSelectSet4" onclick="changeQuizSet(4)" class="py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1 sm:gap-1.5">  
+                    <i class="fa-solid fa-4"></i> Hari Keempat <span class="text-xs opacity-75 hidden md:inline">(30 Soal Keselamatan)</span>  
                 </button>  
             </div>  
         </div>  
@@ -947,8 +949,222 @@
             }  
         ];  
   
+        // Set 4 Questions (Hari Keempat - 30 Questions regarding K3 & Keselamatan Kerja Tambahan)  
+        const set4Questions = [  
+            {  
+                id: 1,  
+                question: "製造業（せいぞうぎょう）の 中（なか）で、未熟練（みじゅくれん）作業者（さぎょうしゃ）の 死傷者（ししょうしゃ）が 最（もっと）も 多（おお）いのはどこですか？",  
+                options: ["A: 金属（きんぞく）製品（せいひん）製造業（せいぞうぎょう）", "B: 飲食料品（いんしょくりょうひん）製造業（せいぞうぎょう）", "C: 自動車（じどうしゃ）製造業（せいぞうぎょう）"],  
+                answer: 1,  
+                explanation: "Di antara semua industri manufaktur, industri pengolahan makanan dan minuman (insyokuhin seizōgyō) memiliki jumlah korban tewas dan luka-luka terbanyak bagi pekerja tidak terampil."  
+            },  
+            {  
+                id: 2,  
+                question: "仕事（しごと）に 慣（な）れていない 人（ひと）は、どうして 労働（ろうどう）災害（さいがい）に 遭（あ）いやすいですか？",  
+                options: ["A: いつも 走（はし）って 仕事（しごと）を するからです", "B: 危険（きけん）に なかなか 気（き）が つかないからです", "C: 機械（きかい）を 上手（じょうず）に 算（つか）うからです"],  
+                answer: 1,  
+                explanation: "Pekerja yang belum terbiasa dengan pekerjaan lebih mudah mengalami kecelakaan karena mereka sulit menyadari adanya bahaya di sekitar mereka."  
+            },  
+            {  
+                id: 3,  
+                question: "食品（しょくひん）製造（せいぞう）工場（こうじょう）で 一番（いちばん）多（おお）く 起（お）こる 労働（ろうどう）災害（さいがい）は 何（なに）ですか？",  
+                options: ["A: やけど", "B: 転倒（てんとう）", "C: 腰痛（ようつう）"],  
+                answer: 1,  
+                explanation: "Berdasarkan data statistik, kecelakaan kerja yang paling sering terjadi di pabrik makanan adalah terpeleset atau terjatuh (tentō / 転倒)."  
+            },  
+            {  
+                id: 4,  
+                question: "「転倒（てんとう）」を 防（ふせ）ぐために、どうしなければなりませんか？",  
+                options: ["A: 床（ゆか）が 濡（ぬ）れているときは、水（みず）を とって きれいに ふき取（と）る", "B: 通路（つうろ）に 空箱（からばこ）を たくさん 置（お）く", "C: 走（はし）って 仕事（しごと）を 急（いそ）ぐ"],  
+                answer: 0,  
+                explanation: "Untuk mencegah kecelakaan terpeleset, lantai yang basah harus dibersihkan dan dilap airnya dengan benar."  
+            },  
+            {  
+                id: 5,  
+                question: "機械（きかい）の 掃除（そうじ）を するとき、一番（いちばん）大切（たいせつ）な ことは 何（なに）ですか？",  
+                options: ["A: 急（いそ）いで 掃除（そうじ）を 終（お）わらせる", "B: 機械（きかい）を 止（と）めないで 掃除（そうじ）する", "C: 停止（ていし）ボタンを 押（お）して、機械（きかい）が 止（と）まったことを 確認（かくにん）してから 掃除（そうじ）する"],  
+                answer: 2,  
+                explanation: "Saat membersihkan mesin, kita wajib menekan tombol berhenti dan memastikan mesin benar-benar berhenti total agar tangan tidak terjepit."  
+            },  
+            {  
+                id: 6,  
+                question: "機械（きかい）の 中（なか）に つまった 製品（せいひん）を 取（と）るとき、どうしてはいけませんか？",  
+                options: ["A: 電源（でんげん）を 切（き）る", "B: 停止（ていし）ボタンを 押（お）さないで、そのまま 手（て）を 入（い）れる", "C: 責任者（せきにんしゃ）に 相談（そうだん）する"],  
+                answer: 1,  
+                explanation: "Sangat dilarang memasukkan tangan ke dalam mesin yang macet tanpa menekan tombol berhenti terlebih dahulu karena mesin bisa bergerak secara tiba-tiba."  
+            },  
+            {  
+                id: 7,  
+                question: "フェールセーフ（Fail-safe）とは どのような 仕組み（しくみ）ですか？",  
+                options: ["A: 扉（とびら）を 開（あ）けると、機械（きかい）が 自動的（じどうてき）に 止（と）まる 仕組み（しくみ）", "B: 人（ひと）が うっかりしても 事故（じこ）に ならない 仕組み（しくみ）", "C: 機械（きかい）の スピードが 速（はや）くなる 仕組み（しくみ）"],  
+                answer: 0,  
+                explanation: "Fail-safe adalah mekanisme di mana mesin akan berhenti secara otomatis, misalnya ketika pintu pengaman dibuka."  
+            },  
+            {  
+                id: 8,  
+                question: "フールプルーフ（Fool-proof）の 説明（せつめい）として 正（ただ）しいものは どれですか？",  
+                options: ["A: 人（ひと）が 間違（まちが）った 操作（そうさ）を しても、災害（さいがい）に ならないようにした 仕組み（しくみ）", "B: 機械（きかい）を 新（あたら）しく 買い替（かいか）えること", "C: 毎日（まいにち）必（かなら）ず 掃除（そうじ）を すること"],  
+                answer: 0,  
+                explanation: "Fool-proof adalah sistem pengaman yang dirancang agar pekerja tidak mengalami kecelakaan meskipun mereka melakukan kesalahan atau ceroboh."  
+            },  
+            {  
+                id: 9,  
+                question: "重（おも）い 荷物（にもつ）を 持（も）って 運（はこ）ぶとき、どうするのが 正（ただ）しいですか？",  
+                options: ["A: 腰（こし）を 曲（ま）げたまま 急（いそ）いで 持ち上（あげ）げる", "B: 身体（からだ）を 荷物（にもつ）に 近（ちか）づけて、膝（ひざ）を 曲（ま）げて 持ち上（あげ）げる", "C: 片手（かたて）だけで 素早（すばや）く 持ち上（あげ）げる"],  
+                answer: 1,  
+                explanation: "Saat mengangkat benda berat, dekatkan tubuh ke benda tersebut, tekuk lutut, turunkan pinggang, lalu angkat perlahan sambil meluruskan lutut untuk mencegah sakit pinggang."  
+            },  
+            {  
+                id: 10,  
+                question: "夏（なつ）に 気温（きおん）や 湿度（しつど）が 高（たか）い 場所（ばしょ）で 仕事（しごと）を するとき、何（なに）に 気（き）を つけなければなりませんか？",  
+                options: ["A: 熱中症（ねっちゅうしょう）を 防（ふせ）ぐために、水分（すいぶん）や 塩分（えんぶん）を とる", "B: 厚手（あつで）の ジャケットを 着用（ちゃくよう）する", "C: 休憩（きゅうけい）を とらないで 続（つづ）ける"],  
+                answer: 0,  
+                explanation: "Untuk mencegah serangan panas (netchūshō), pekerja harus sering beristirahat serta rutin mengonsumsi air dan garam."  
+            },  
+            {  
+                id: 11,  
+                question: "フォークリフトの 運転者（うんてんしゃ）は、倉庫（そうこ）の 入口（いりぐち）の 前（まえ）で どうしなければなりませんか？",  
+                options: ["A: スピードを 上（あ）げて 通過（つうか）する", "B: 一時（いちじ）停止（ていし）し、指差（ゆびさ）し 呼称（こしょう）を して 安全（あんぜん）確認（かくにん）を する", "C: クラクションを 鳴（な）らし 続（つづ）ける"],  
+                answer: 1,  
+                explanation: "Pengemudi forklift wajib berhenti sejenak di depan pintu masuk gudang, melakukan penunjukan dan panggilan (shisa koshō), serta memastikan keselamatan."  
+            },  
+            {  
+                id: 12,  
+                question: "作業服（さぎょうふく）を 着（き）るとき、袖口（そでぐち）は どうしなければなりませんか？",  
+                options: ["A: 袖（そで）を 大き（おおき）く まくり上（あ）げる", "B: 袖口（そでぐち）を しっかり しめて、まくり上（あ）げない", "C: 長袖（ながそで）ではなく 半袖（はんそで）に する"],  
+                answer: 1,  
+                explanation: "Pakaian kerja lengan panjang harus dikancingkan di bagian pergelangan tangan dan tidak boleh digulung agar tidak tersangkut mesin."  
+            },  
+            {  
+                id: 13,  
+                question: "高（たか）さが 2メートル 以上（いじょう）の ところで 作業（さぎょう）するとき、何（なに）を かぶらなければなりませんか？",  
+                options: ["A: 保護（ほご）メガネ", "B: ヘルメット（安全帽（あんぜんぼう））", "C: 耳栓（みみせん）"],  
+                answer: 1,  
+                explanation: "Saat melakukan pekerjaan di ketinggian (2 meter atau lebih), pekerja wajib mengenakan helm untuk mencegah cedera kepala."  
+            },  
+            {  
+                id: 14,  
+                question: "化学（かがく）薬品（やくひん）や 細（こま）かい 粉末（ふんまつ）を 扱（あつか）うとき、目（め）を 守（まも）るために 何（なに）を 着用（ちゃくよう）しますか？",  
+                options: ["A: 保護（ほご）メガネ", "B: マスク", "C: 軍手（ぐんて）"],  
+                answer: 0,  
+                explanation: "Kacamata pelindung (hogo megane) dipakai untuk mencegah cairan kimia atau serbuk halus masuk ke dalam mata."  
+            },  
+            {  
+                id: 15,  
+                question: "騒音（そうおん）（うるさい 音（おと））が する 場所（ばしょ）で 仕事（しごと）を するとき、耳（みみ）を 守（まも）るために 何（なに）を 使（つか）いますか？",  
+                options: ["A: マスク", "B: 耳栓（みみせん）", "C: ヘルメット"],  
+                answer: 1,  
+                explanation: "Penyumbat telinga (misen) digunakan di area bising untuk mencegah gangguan pendengaran."  
+            },  
+            {  
+                id: 16,  
+                question: "ナイフや 包丁（ほうちょう）を 使（つか）って 肉（にく）を 切（き）る 作業（さぎょう）のとき、手指（てゆび）を 切（き）らないように 何（なに）を つけますか？",  
+                options: ["A: ゴム手袋（てぶくろ）", "B: 耐切創（たいせっそう）手袋（てぶくろ）（くさり手袋（てぶくろ）など）", "C: 布（ぬの）手袋（てぶくろ）"],  
+                answer: 1,  
+                explanation: "Sarung tangan tahan potong (taikessō tebukuro) atau sarung tangan rantai digunakan untuk melindungi jari dari luka sayat saat memotong bahan keras."  
+            },  
+            {  
+                id: 17,  
+                question: "オーブンから 取り出（とりだ）したばかりの 熱（あつ）い 鉄板（てっぱん）を 触（ふ）れるとき、どうしなければなりませんか？",  
+                options: ["A: 素手（すで）で 急（いそ）いで 運（はこ）ぶ", "B: 保護（ほご）手袋（てぶくろ）を 着用（ちゃくよう）して 運（はこ）ぶ", "C: タオルで 包（つつ）んで 持（も）つ"],  
+                answer: 1,  
+                explanation: "Untuk mencegah luka bakar, pekerja wajib mengenakan sarung tangan pelindung saat memindahkan loyang atau benda panas."  
+            },  
+            {  
+                id: 18,  
+                question: "5Sの 中（なか）で、「不要（ふよう）なものを 片（かた）づけて、作業場（さぎょうじょう）に ない 状態（じょうたい）に すること」は 何（なに）ですか？",  
+                options: ["A: 整理（せいり）", "B: 整頓（せいとん）", "C: 清掃（せいそう）"],  
+                answer: 0,  
+                explanation: "Seiri (Pemilahan) adalah kegiatan menyingkirkan barang-barang yang tidak diperlukan dari area kerja."  
+            },  
+            {  
+                id: 19,  
+                question: "道具（どうぐ）や 原材料（げんざいりょう）の 置（お）く 場所（ばしょ）を 決（き）め、決（き）められた 場所（ばしょ）に 置（お）くことは 何（なに）ですか？",  
+                options: ["A: 整理（せいり）", "B: 整頓（せいとん）", "C: 清潔（せいけつ）"],  
+                answer: 1,  
+                explanation: "Seiton (Penataan) adalah kegiatan mengatur letak alat dan bahan pada tempat yang telah ditentukan agar mudah dijangkau dan aman."  
+            },  
+            {  
+                id: 20,  
+                question: "機械（きかい）を いつも きれいにして、故障（こしょう）を 減（へ）らす 活動（かつどう）は 何（なに）ですか？",  
+                options: ["A: 清掃（せいそう）", "B: 習慣（しゅうかん）付（づ）け", "C: 整理（せいり）"],  
+                answer: 0,  
+                explanation: "Seisō (Pembersihan) menjaga fasilitas tetap bersih sehingga mengurangi kerusakan mendadak dan risiko kecelakaan."  
+            },  
+            {  
+                id: 21,  
+                question: "食品（しょくひん）工場（こうじょう）で 働（はたら）くとき、作業場（さぎょうじょう）の ルールとして 正（ただ）しいものは どれですか？",  
+                options: ["A: 通路（つうろ）を 走（はし）って 移動（いどう）する", "B: コンベアの 下（した）を くぐって 近道（ちかみち）する", "C: 決（き）められた 通路（つうろ）を 歩（ある）く"],  
+                answer: 2,  
+                explanation: "Pekerja dilarang berlari atau merayap di bawah konveyor, melainkan harus berjalan di jalur atau lorong yang telah ditentukan."  
+            },  
+            {  
+                id: 22,  
+                question: "機械（きかい）の スイッチを 入（い）れる 前（まえ）や、大切（たいせつ）な 作業（さぎょう）の 前（まえ）に 行（おこな）う 確認（かくにん）方法（ほうほう）は どれですか？",  
+                options: ["A: 指差（ゆびさ）し 呼称（こしょう）", "B: 大き（おおき）な 声（こえ）で 歌（うた）を 歌（うた）う", "C: 目（め）を 閉（と）じて 考（かんが）える"],  
+                answer: 0,  
+                explanation: "Konfirmasi keselamatan dilakukan dengan menunjuk objek menggunakan jari sambil menyebutkan kondisinya dengan suara keras (shisa koshō)."  
+            },  
+            {  
+                id: 23,  
+                question: "仕事（しごと）中（ちゅう）に 危険（きけん）な ところを 見（み）つけたとき、どうしなければなりませんか？",  
+                options: ["A: 自分（じぶん）だけの 秘密（ひみつ）に する", "B: すぐに 責任者（せきにんしゃ）に 報告（ほうこく）する", "C: 明日（あした）まで そのままに しておく"],  
+                answer: 1,  
+                explanation: "Jika menemukan potensi bahaya di area kerja, pekerja harus segera melaporkannya kepada penanggung jawab."  
+            },  
+            {  
+                id: 24,  
+                question: "火事（かじ）や 大き（おおき）な 事故（じこ）が 起（お）きたとき、最初（さいしょ）に すべきことは 何（なに）ですか？",  
+                options: ["A: パニックに なって その場（ば）で 走（はし）る", "B: 周（まわ）りの 人（ひと）に 大き（おおき）な 声（こえ）で 視（し）らせる", "C: 一人（ひとり）で 勝手（かって）に 消火器（しょうかき）を 探（さが）しに 行（い）く"],  
+                answer: 1,  
+                explanation: "Saat terjadi situasi darurat, hal pertama yang harus dilakukan adalah memberitahu orang di sekitar dan penanggung jawab dengan suara keras."  
+            },  
+            {  
+                id: 25,  
+                question: "事故（じこ）が 起（お）きたとき、助（たす）けようとして 急（いそ）いで 近（ちか）づくのは なぜ 危険（きけん）ですか？",  
+                options: ["A: 自分（じぶん）も 同（おな）じ 災害（さいがい）に 遭（あ）うかもしれないから（二次（にじ）災害（さいがい））", "B: 上司（じょうし）に 怒（おこ）られるから", "C: 仕事（しごと）が 遅（おそ）く なるから"],  
+                answer: 0,  
+                explanation: "Mendekat secara terburu-buru sangat berbahaya karena penolong juga berisiko menjadi korban kecelakaan sekunder (niji saigai)."  
+            },  
+            {  
+                id: 26,  
+                question: "ハインリッヒの 法則（ほうそく）によると、1つの 大き（おおき）な 事故（じこ）の 裏（うら）に、何件（なんけん）の ヒヤリ・ハット（危（あぶ）なかったこと）が あると 言（い）われていますか？",  
+                options: ["A: 1件（けん）", "B: 29件（けん）", "C: 300件（けん）"],  
+                answer: 2,  
+                explanation: "Menurut Hukum Heinrich, rasio kecelakaan adalah 1 kecelakaan besar, 29 cedera ringan, dan 300 kejadian nyaris celaka (hiyari-hatto)."  
+            },  
+            {  
+                id: 27,  
+                question: "ヒヤリ・ハット 活動（かつどう）の 目的（もくてき）は 何（なに）ですか？",  
+                options: ["A: 小（ちい）さな 危険（きけん）や 気（き）づきを みんなで 共有（きょうゆう）して、事故（じこ）を 防（ふせ）ぐこと", "B: 誰（だれ）が ミスを したか 罰則（ばっそく）を 決（き）めること", "C: 生産量（せいさんりょう）を 減（へ）らすこと"],  
+                answer: 0,  
+                explanation: "Kegiatan hiyari-hatto bertujuan melaporkan dan berbagi pengalaman nyaris celaka agar perbaikan dapat dilakukan untuk mencegah kecelakaan nyata."  
+            },  
+            {  
+                id: 28,  
+                question: "KYT（危険予知訓練（きけんよちくんれん））とは 何（なに）を する 訓練（くんれん）ですか？",  
+                options: ["A: 新（あたら）しい 機械（きかい）の 値段（ねだん）を 計算（けいさん）する 訓練（くんれん）", "B: 作業（さぎょう）の どこに どんな 危険（きけん）が あるか、気（き）が つく 力（ちから）を つける 訓練（くんれん）", "C: 速（はや）く 走（はし）るための 訓練（くんれん）"],  
+                answer: 1,  
+                explanation: "KYT (Kiken Yochi Training) adalah pelatihan untuk melatih kepekaan dan kemampuan mengenali potensi bahaya tersembunyi (senzai-teki na kiken) sebelum bekerja."  
+            },  
+            {  
+                id: 29,  
+                question: "脚立（きゃたつ）を 使（つか）って 高（たか）い ところで 作業（さぎょう）するとき、何（なに）を セットしなければなりませんか？",  
+                options: ["A: 開（ひら）き止（ど）め 金具（かなぐ）", "B: 車輪（しゃりん）の ストッパー", "C: クッションマット"],  
+                answer: 0,  
+                explanation: "Sebelum menggunakan tangga lipat (kyatatsu), pekerja wajib memasang dan mengunci bagian \"pengunci rentang (hirakidome kanagu)\" agar tangga tidak goyah atau roboh."  
+            },  
+            {  
+                id: 30,  
+                question: "機械（きかい）の 点検（てんけん）と 整備（せいび）（メンテナンス）は なぜ 必要（ひつよう）ですか？",  
+                options: ["A: 機械（きかい）を きれいに 見（み）せて 写真（しゃしん）を とるため", "B: 機械（きかい）を 安定（あんてい）して 動（うご）かし、災害（さいがい）を 防（ふせ）ぐため", "C: 電気代（でんきだい）を 高（たか）く するため"],  
+                answer: 1,  
+                explanation: "Pemeriksaan dan pemeliharaan berkala sangat penting agar mesin dapat beroperasi secara stabil dan mencegah terjadinya kecelakaan kerja."  
+            }  
+        ];  
+  
         // State Management  
-        let currentSetIndex = 1; // 1, 2, or 3  
+        let currentSetIndex = 1; // 1, 2, 3, or 4  
         let currentQuestions = set1Questions;  
         let currentTab = 'quiz';  
         let currentQuestionIndex = 0;  
@@ -968,12 +1184,13 @@
             // Sound effects can be integrated here if needed
         }  
   
-        // Change Active Quiz Set (Set 1, Set 2, or Set 3)  
+        // Change Active Quiz Set (Set 1, Set 2, Set 3, or Set 4)  
         function changeQuizSet(setNum) {  
             currentSetIndex = setNum;  
             const btn1 = document.getElementById('btnSelectSet1');  
             const btn2 = document.getElementById('btnSelectSet2');  
             const btn3 = document.getElementById('btnSelectSet3');  
+            const btn4 = document.getElementById('btnSelectSet4');  
   
             const inactiveClass = "py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1 sm:gap-1.5";  
             const activeClass = "py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition bg-brand-50 text-brand-700 border border-brand-200 flex items-center justify-center gap-1 sm:gap-1.5 shadow-sm";  
@@ -981,6 +1198,7 @@
             btn1.className = inactiveClass;  
             btn2.className = inactiveClass;  
             btn3.className = inactiveClass;  
+            btn4.className = inactiveClass;  
   
             if (setNum === 1) {  
                 currentQuestions = set1Questions;  
@@ -1009,6 +1227,15 @@
                 document.getElementById('startTotalQuestions').innerText = "30 Soal";  
                 document.getElementById('quizSetBadgeText').innerText = "Kuis Hari Ketiga (K3 & Keselamatan)";  
                 document.getElementById('studyHeaderDesc').innerText = "Pelajari 30 soal Kuis Hari Ketiga (K3 & Keselamatan Kerja) dengan Furigana dan pembahasan Bahasa Indonesia.";  
+            } else if (setNum === 4) {  
+                currentQuestions = set4Questions;  
+                btn4.className = activeClass;  
+                document.getElementById('startCoverTitle').innerText = "Simulasi Kuis Hari Keempat";  
+                document.getElementById('startCoverDesc').innerText = "Uji pemahaman Anda mengenai Keselamatan Kerja Lanjutan, Fail-Safe, Fool-Proof, Hukum Heinrich, dan KYT.";  
+                document.getElementById('startCoverIcon').className = "fa-solid fa-hard-hat";  
+                document.getElementById('startTotalQuestions').innerText = "30 Soal";  
+                document.getElementById('quizSetBadgeText').innerText = "Kuis Hari Keempat (K3 & Keselamatan)";  
+                document.getElementById('studyHeaderDesc').innerText = "Pelajari 30 soal Kuis Hari Keempat (K3 Lanjutan) dengan Furigana dan pembahasan Bahasa Indonesia.";  
             }  
   
             // Reset screens  
@@ -1202,7 +1429,7 @@
             const resultTitle = document.getElementById('resultTitle');  
             const resultSubtitle = document.getElementById('resultSubtitle');  
   
-            const setName = currentSetIndex === 1 ? 'Hari Pertama' : (currentSetIndex === 2 ? 'Hari Kedua (HACCP)' : 'Hari Ketiga (K3 & Keselamatan)');  
+            const setName = currentSetIndex === 1 ? 'Hari Pertama' : (currentSetIndex === 2 ? 'Hari Kedua (HACCP)' : (currentSetIndex === 3 ? 'Hari Ketiga (K3 & Keselamatan)' : 'Hari Keempat (K3 Lanjutan)'));  
   
             if (scorePercentage >= 80) {  
                 badgeIcon.className = "w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-4 bg-emerald-100 text-emerald-600 border-4 border-emerald-200 shadow-emerald-200";  
@@ -1221,7 +1448,7 @@
             const container = document.getElementById('studyList');  
             container.innerHTML = '';  
   
-            const setTag = currentSetIndex === 1 ? 'Hari Pertama' : (currentSetIndex === 2 ? 'Hari Kedua' : 'Hari Ketiga');  
+            const setTag = currentSetIndex === 1 ? 'Hari Pertama' : (currentSetIndex === 2 ? 'Hari Kedua' : (currentSetIndex === 3 ? 'Hari Ketiga' : 'Hari Keempat'));  
   
             currentQuestions.forEach((q, index) => {  
                 const card = document.createElement('div');  
@@ -1291,4 +1518,3 @@
     </script>  
 </body>  
 </html>
-
