@@ -95,20 +95,23 @@
     <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col">  
   
         <!-- Quiz Day Selector Bar -->  
-        <div class="bg-white p-2 rounded-2xl border border-slate-200/80 shadow-sm mb-4 flex items-center gap-2">  
+        <div class="bg-white p-2 rounded-2xl border border-slate-200/80 shadow-sm mb-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">  
             <span class="text-xs font-bold text-slate-400 pl-2 uppercase tracking-wider hidden sm:inline"><i class="fa-solid fa-layer-group text-brand-600"></i> Pilih Paket:</span>  
-            <div class="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">  
+            <div class="flex-1 grid grid-cols-2 sm:grid-cols-5 gap-1.5 sm:gap-2">  
                 <button id="btnSelectSet1" onclick="changeQuizSet(1)" class="py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition bg-brand-50 text-brand-700 border border-brand-200 flex items-center justify-center gap-1 sm:gap-1.5">  
                     <i class="fa-solid fa-1"></i> Hari Pertama <span class="text-xs opacity-75 hidden md:inline">(15 Soal)</span>  
                 </button>  
                 <button id="btnSelectSet2" onclick="changeQuizSet(2)" class="py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1 sm:gap-1.5">  
-                    <i class="fa-solid fa-2"></i> Hari Kedua <span class="text-xs opacity-75 hidden md:inline">(50 Soal HACCP)</span>  
+                    <i class="fa-solid fa-2"></i> Hari Kedua <span class="text-xs opacity-75 hidden md:inline">(50 Soal)</span>  
                 </button>  
                 <button id="btnSelectSet3" onclick="changeQuizSet(3)" class="py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1 sm:gap-1.5">  
-                    <i class="fa-solid fa-3"></i> Hari Ketiga <span class="text-xs opacity-75 hidden md:inline">(30 Soal K3)</span>  
+                    <i class="fa-solid fa-3"></i> Hari Ketiga <span class="text-xs opacity-75 hidden md:inline">(30 Soal)</span>  
                 </button>  
                 <button id="btnSelectSet4" onclick="changeQuizSet(4)" class="py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1 sm:gap-1.5">  
-                    <i class="fa-solid fa-4"></i> Hari Keempat <span class="text-xs opacity-75 hidden md:inline">(30 Soal Keselamatan)</span>  
+                    <i class="fa-solid fa-4"></i> Hari Keempat <span class="text-xs opacity-75 hidden md:inline">(30 Soal)</span>  
+                </button>  
+                <button id="btnSelectSet5" onclick="changeQuizSet(5)" class="py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1 sm:gap-1.5 col-span-2 sm:col-span-1">  
+                    <i class="fa-solid fa-5"></i> Hari Kelima <span class="text-xs opacity-75 hidden md:inline">(40 Soal)</span>  
                 </button>  
             </div>  
         </div>  
@@ -1163,8 +1166,292 @@
             }  
         ];  
   
+        // Set 5 Questions (Hari Kelima - 40 Questions: Higienitas, Pengolahan Makanan, dan K3)  
+        const set5Questions = [  
+            {  
+                id: 1,  
+                question: "食中毒（しょくちゅうどく）を防ぐ（ふせぐ）ための「3つの原則（げんそく）」として、正（ただ）しいものはどれですか。",  
+                options: ["A. つけない、ふやさない、やっつける", "B. あらわない、ふやさない、やっつける", "C. つけない、のこさない、やっつける"],  
+                answer: 0,  
+                explanation: "3 Prinsip mencegah keracunan makanan: Tsukenai (tidak menempelkan/tidak mengontaminasi), Fuyasanai (tidak memperbanyak), Yattosukeru/Korosu (membunuh/membasmi)."  
+            },  
+            {  
+                id: 2,  
+                question: "ノロウイルスについて、正（ただ）しいものはどれですか。",  
+                options: ["A. 加熱（かねつ）しても絶対（ぜったい）に死（し）にません。", "B. カキなどの二枚貝（にまいがい）に気（き）をつける必要（ひつよう）があります。", "C. アルコール消毒（しょうどく）だけで完全（かんぜん）に消（け）すことができます。"],  
+                answer: 1,  
+                explanation: "Norovirus sering terkontaminasi pada kerang ganda (nimaigai seperti tiram). Alkohol biasa kurang efektif terhadap Norovirus, dan virus ini mati dengan pemanasan tinggi."  
+            },  
+            {  
+                id: 3,  
+                question: "細菌（さいきん）がいちばん増（ふ）えやすい温度帯（おんどたい）はどれですか。",  
+                options: ["A. -15℃ ～ 0℃", "B. 10℃ ～ 60℃", "C. 75℃ ～ 90℃"],  
+                answer: 1,  
+                explanation: "Rentang suhu bahaya (danger zone) di mana bakteri berkembang biak dengan sangat cepat adalah 10℃ ～ 60℃."  
+            },  
+            {  
+                id: 4,  
+                question: "正（ただ）しい手洗（てあら）いのタイミングとして、まちがっているものはどれですか。",  
+                options: ["A. トイレに行（い）ったあと", "B. 生肉（なまにく）をさわったあと", "C. 作業服（さぎょうふく）に着替（きが）える前（まえ）"],  
+                answer: 2,  
+                explanation: "Cuci tangan dilakukan setelah berganti pakaian kerja bersih dan sebelum menyentuh makanan, bukan sebelum berganti baju."  
+            },  
+            {  
+                id: 5,  
+                question: "黄色（おうしょく）ブドウ球菌（きゅうきん）の説明（せつめい）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 手（て）や指（ゆび）にきずがある人（ひと）が食（た）べものをさわると、つきやすいです。", "B. カキなどの貝類（かいるい）にだけ入（はい）っています。", "C. 加熱（かねつ）すれば、毒素（どくそ）はすぐに消（け）えます。"],  
+                answer: 0,  
+                explanation: "Staphylococcus aureus (Oushoku Budoukyuukin) hidup di kulit/luka tangan manusia. Toxin-nya tahan panas, jadi pemanasan tidak akan menghilangkan racunnya."  
+            },  
+            {  
+                id: 6,  
+                question: "ウイルスや細菌（さいきん）を殺菌（さっきん）する（加熱（かねつ）する）とき、中心温度（ちゅうしんおんど）と時間（じかん）の基準（きじゅん）として正（ただ）しいものはどれですか。（※一般的（いっぱんてき）な細菌（さいきん）の場合（ばあい））",  
+                options: ["A. 65℃ で 1分以上（いっぷんいじょう）", "B. 75℃ で 1分以上（いっぷんいじょう）", "C. 85℃ で 10秒以上（じゅうびょういじょう）"],  
+                answer: 1,  
+                explanation: "Pembasmian bakteri umum memerlukan suhu inti produk minimal 75℃ selama 1 menit atau lebih."  
+            },  
+            {  
+                id: 7,  
+                question: "作業員（さぎょういん）の健康管理（けんこうかんり）について、正（ただ）しいものはどれですか。",  
+                options: ["A. おなかが痛（いた）くて下痢（げり）をしていても、薬（くすり）をのめば作業（さぎょう）していいです。", "B. 下痢（げり）や嘔吐（おうと）の症状（しょうじょう）があるときは、責任者（せきにんしゃ）に報告（ほうこく）して作業（さぎょう）を休（やす）みます。", "C. 熱（ねつ）があっても、マスクをすれば食品（しょくひん）をさわっても大丈夫（だいじょうぶ）です。"],  
+                answer: 1,  
+                explanation: "Pekerja yang mengalami gejala diare (geri) atau muntah (outo) dilarang keras menyentuh makanan dan harus melapor ke atasan."  
+            },  
+            {  
+                id: 8,  
+                question: "HACCP（ハサップ）の「CCP（重要管理点（じゅうようかんりてん））」の説明（せつめい）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 危害（きがい）を防（ふせ）ぐために、特（とく）に大事（だいじ）な工程（こうてい）を管理（かんり）することです。", "B. 工場（こうじょう）の中（なか）をきれいに掃除（そうじ）するルールのことです。", "C. 毎日（まいにち）作業服（さぎょうふく）を洗（あら）うことです。"],  
+                answer: 0,  
+                explanation: "CCP (Critical Control Point) dalam HACCP adalah titik/langkah penting untuk mengendalikan ancaman bahaya keamanan pangan."  
+            },  
+            {  
+                id: 9,  
+                question: "作業服（さぎょうふく）を着（き）るとき、正（ただ）しいものはどれですか。",  
+                options: ["A. 髪（かみ）の毛（け）が小（ちい）さく出（で）ても、帽子（ぼうし）をかぶっていれば問題（もんだい）ありません。", "B. 爪（つめ）は短（みじか）く切（き）り、指輪（ゆびわ）や時計（とけい）ははずします。", "C. ポケットにスマホや鍵（かぎ）を入れ（いれ）て作業（さぎょう）します。"],  
+                answer: 1,  
+                explanation: "Kuku harus pendek, dan dilarang memakai aksesoris (cincin, jam) yang dapat jatuh atau menyimpan kotoran."  
+            },  
+            {  
+                id: 10,  
+                question: "カンピロバクターによる食中毒（しょくちゅうどく）を防（ふせ）ぐ方法（ほうほう）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 鶏肉（とりにく）などを十分（じゅうぶん）に加熱（かねつ）して食べ（たべ）ます。", "B. 冷蔵庫（れいぞうこ）に入れ（いれ）れば、細菌（さいきん）は完全（かんぜん）に死（し）にます。", "C. 野菜（やさい）と一緒（いっしょ）に生（なま）の肉（にく）を洗（あら）います。"],  
+                answer: 0,  
+                explanation: "Campylobacter banyak terdapat pada daging unggas (toriniku) mentah dan mati jika dimasak hingga matang."  
+            },  
+            {  
+                id: 11,  
+                question: "サルモネラ属菌（ぞくきん）がよく入（はい）っている食品（しょくひん）はどれですか。",  
+                options: ["A. 卵（たまご）や肉（にく）", "B. おにぎりやお弁当（べんとう）", "C. 井戸水（いどみず）や缶詰（かんづめ）"],  
+                answer: 0,  
+                explanation: "Salmonella sangat umum ditemukan pada telur mentah (tamago) dan daging."  
+            },  
+            {  
+                id: 12,  
+                question: "ノロウイルスを加熱（かねつ）して殺菌（さっきん）する場合（ばあい）の温度（おんど）と時間（じかん）はどれですか。",  
+                options: ["A. 75℃ で 1分以上（いっぷんいじょう）", "B. 85℃ ～ 90℃ で 90秒以上（びょういじょう）", "C. 100℃ で 10分以上（じゅっぷんいじょう）"],  
+                answer: 1,  
+                explanation: "Khusus Norovirus, diperlukan pemanasan suhu inti lebih tinggi, yaitu 85℃ ～ 90℃ selama 90 detik atau lebih."  
+            },  
+            {  
+                id: 13,  
+                question: "微生物（びせいぶつ）が増（ふ）えるために必要（ひつよう）な「3つの要素（ようそ）」はどれですか。",  
+                options: ["A. 水分（すいぶん）、栄養（えいよう）、温度（おんど）", "B. 水分（すいぶん）、空気（くうき）、光（ひかり）", "C. 栄養（えいよう）、温度（おんど）、塩分（えんぶん）"],  
+                answer: 0,  
+                explanation: "3 syarat utama pertumbuhan mikroorganisme: Air (suibun), Nutrisi (eiyou), dan Suhu (ondo)."  
+            },  
+            {  
+                id: 14,  
+                question: "食品（しょくひん）の保管温度（ほかんおんど）について、正（ただ）しいものはどれですか。",  
+                options: ["A. 冷蔵（れいぞう）は 15℃ 以下（いか）、冷凍（れいとう）は 0℃ 以下（いか）です。", "B. 冷蔵（れいぞう）は 10℃ 以下（いか）、冷凍（れいとう）は -15℃ 以下（いか）です。", "C. 冷蔵（れいぞう）は 5℃ 以下（いか）、冷凍（れいとう）は -5℃ 以下（いか）です。"],  
+                answer: 1,  
+                explanation: "Standar pendinginan (reizou) adalah di bawah 10℃, dan pembekuan (reitou) di bawah -15℃."  
+            },  
+            {  
+                id: 15,  
+                question: "爪（つめ）の間（あいだ）の汚れ（よごれ）を落（お）とすために使（つか）わないものはどれですか。",  
+                options: ["A. 石（いし）けん", "B. 爪（つめ）ブラシ", "C. アルコール（これだけで洗い流す（あらいながす））"],  
+                answer: 2,  
+                explanation: "Kotoran di sela kuku harus dibersihkan menggunakan sabun dan sikat kuku (tsume burashi), bukan hanya disemprot alkohol."  
+            },  
+            {  
+                id: 16,  
+                question: "ウェルシュ菌（きん）の特徴（とくちょう）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 空気（くうき）がすきな菌（きん）なので、表面（ひょうめん）に増（ふ）えます。", "B. 大人数分（だいにんずうぶん）のカレーやスープなどをつくって放置（ほうち）すると増（ふ）えやすいです。", "C. 冷蔵庫（れいぞうこ）の中（なか）（4℃ 以下（いか））でもどんどん増（ふ）えます。"],  
+                answer: 1,  
+                explanation: "Bakteri Welchii (Clostridium perfringens) adalah bakteri anaerob (benci udara) yang biasa berkembang biak cepat di dalam panci besar berisi makanan kental seperti kari/sup yang didiamkan."  
+            },  
+            {  
+                id: 17,  
+                question: "一般衛生管理（いっぱんえいせいかんり）とHACCPの関係（かんけい）について、正（ただ）しいものはどれですか。",  
+                options: ["A. 一般衛生管理（いっぱんえいせいかんり）ができていなくても、HACCPだけやれば大丈夫（だいじょうぶ）です。", "B. 一般衛生管理（いっぱんえいせいかんり）という土台（どだい）の上に（うえに）、HACCPを組み立て（くみたて）ます。", "C. HACCPをはじめれば、一般衛生管理（いっぱんえいせいかんり）はやめてもいいです。"],  
+                answer: 1,  
+                explanation: "Manajemen sanitasi umum (Ippan Eisei Kanri) merupakan fondasi wajib sebelum menerapkan sistem HACCP."  
+            },  
+            {  
+                id: 18,  
+                question: "手洗（てあら）いのあと、手（て）を拭く（ふく）とき何（なに）を使（つか）いますか。",  
+                options: ["A. 自分（じぶん）のハンカチ", "B. 使い捨て（つかいすて）のペーパータオル（またはエアータオル）", "C. 作業服（さぎょうふく）のすそ"],  
+                answer: 1,  
+                explanation: "Tangan dikeringkan menggunakan kertas tisu sekali pakai (paper towel) atau pengering udara (air towel) agar tidak terjadi kontaminasi ulang."  
+            },  
+            {  
+                id: 19,  
+                question: "腸管出血性大腸菌（ちょうかんしゅっけつせいだいちょうきん）（O157など）について、正（ただ）しいものはどれですか。",  
+                options: ["A. 少ない（すくない）数（かず）の菌（きん）でも食中毒（しょくちゅうどく）になります。", "B. 熱（ねつ）にとても強い（つよい）ので、100℃ で加熱（かねつ）しても死（し）にません。", "C. 肉（にく）の表面（ひょうめん）だけ洗（あら）えば、加熱（かねつ）しなくても食（た）べられます。"],  
+                answer: 0,  
+                explanation: "E. coli O157 tergolong sangat berbahaya karena jumlah bakteri yang sedikit saja sudah cukup menyebabkan infeksi berat."  
+            },  
+            {  
+                id: 20,  
+                question: "工場（こうじょう）に入（はい）るときの粘着（ねんちゃく）ローラーの使い方（つかいかた）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 上（うえ・頭（あたま））から下（した・足（あし））の順番（じゅんばん）にかけます。", "B. 下（した・足（あし））から上（うえ・頭（あたま））の順番（じゅんばん）にかけます。", "C. 髪（かみ）の毛（け）だけにかけます。"],  
+                answer: 0,  
+                explanation: "Penggunaan roller pembersih debu/rambut dilakukan dari atas (head/topi) turun ke bawah (kaki) agar kotoran jatuh ke bawah."  
+            },  
+            {  
+                id: 21,  
+                question: "交差汚染（こうさおせん）を防ぐ（ふせぐ）ための方法（ほうほう）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 生肉（なまにく）を切（き）った包丁（ほうちょう）で、そのまま野菜（やさい）を切（き）ります。", "B. 用途（ようと）ごとに、包丁（ほうちょう）やまな板（いた）の色（いろ）を分け（わけ）ます。", "C. 生肉（なまにく）と加熱済み（かねつずみ）の料理（りょうり）を同（おな）じお皿（さら）に載（の）せます。"],  
+                answer: 1,  
+                explanation: "Kontaminasi silang dicegah dengan membedakan warna pisau dan talenan sesuai peruntukannya (daging mentah, sayur, makanan matang)."  
+            },  
+            {  
+                id: 22,  
+                question: "異物混入（いぶつこんにゅう）とは何（なん）ですか。",  
+                options: ["A. 食品（しょくひん）の中（なか）に、入（はい）ってはいけない物（もの）（髪（かみ）の毛（け）や虫（むし）など）が入（はい）ること。", "B. 食品（しょくひん）に調味料（ちょうみりょう）を入れ（いれ）すぎること。", "C. 食品（しょくひん）の中（なか）に細菌（さいきん）が増（ふ）えること。"],  
+                answer: 0,  
+                explanation: "Ibutsu konnyuu artinya masuknya benda asing yang tidak seharusnya (rambut, serangga, plastik) ke dalam produk."  
+            },  
+            {  
+                id: 23,  
+                question: "金属検出機（きんぞくけんしゅつき）について、正（ただ）しいものはどれですか。",  
+                options: ["A. プラスチックや髪（かみ）の毛（け）を見（み）つけることができます。", "B. 食品（しょくひん）の中（なか）に入（はい）った小（ちい）さな金属（きんぞく）（鉄（てつ）など）を見（み）つけます。", "C. 食品（しょくひん）の温度（おんど）をはかる機械（きかい）です。"],  
+                answer: 1,  
+                explanation: "Detektor logam (metal detector) berfungsi mendeteksi fragmen besi/logam dalam makanan."  
+            },  
+            {  
+                id: 24,  
+                question: "アレルゲン（特定原材料等（とくていげんざいりょうとう））の管理（かんり）について、正（ただ）しいものはどれですか。",  
+                options: ["A. アレルギー物質（ぶっしつ）を含（ふく）む原料（げんりょう）は、他（ほか）の原料（げんりょう）と一緒に（いっしょに）混ぜ（まぜ）て保管（ほかん）します。", "B. アレルゲンを含（ふく）む製品（せいひん）を作（つく）ったあとは、機械（きかい）をしっかり洗浄（せんじょう）します。", "C. アレルゲンは加熱（かねつ）すれば消（け）えるので、管理（かんり）しなくてもいいです。"],  
+                answer: 1,  
+                explanation: "Setelah memproduksi bahan yang mengandung alergen, mesin harus dicuci bersih agar tidak mengontaminasi produk berikutnya."  
+            },  
+            {  
+                id: 25,  
+                question: "洗剤（せんざい）と消毒液（しょうどくえき）を使（つか）う順番（じゅんばん）として、正（ただ）しいものはどれですか。",  
+                options: ["A. ①水洗い（みずあらい） → ②消毒（しょうどく） → ③洗剤（せんざい）で洗う（あらう） → ④水洗い（みずあらい）", "B. ①水洗い（みずあらい） → ②洗剤（せんざい）で洗う（あらう） → ③水洗い（みずあらい） → ④消毒（しょうどく） → ⑤乾燥（かんそう）", "C. ①消毒（しょうどく） → ②洗剤（せんざい）で洗う（あらう） → ③乾燥（かんそう）"],  
+                answer: 1,  
+                explanation: "Urutan sanitasi yang benar: Cuci air → Cuci deterjen → Bilas air → Disinfeksi/Sterilisasi → Keringkan."  
+            },  
+            {  
+                id: 26,  
+                question: "塩素系（えんそけい）消毒液（しょうどくえき）（次亜塩素酸（じあえんそさん）ナトリウム）を使（つか）うときの注意点（ちゅういてん）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 酸性（さんせい）の洗剤（せんざい）と混ぜ（まぜ）ると、危険（きけん）なガスが出（で）て大変（たいへん）危険（きけん）です。", "B. お湯（ゆ）（80℃ 以上（いじょう））と混ぜ（まぜ）ると効果（こうか）が上が（あが）ります。", "C. 濃い（こい）原液（げんえき）のまま直接（ちょくせつ）食品（しょくひん）にかかけます。"],  
+                answer: 0,  
+                explanation: "Sodium hypochlorite jika bercampur dengan pembersih asam akan menghasilkan gas klorin yang sangat beracun (pilihan A benar)."  
+            },  
+            {  
+                id: 27,  
+                question: "汚染区（おせんく）と非汚染区（ひおせんく）の説明（せつめい）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 原材料（げんざいりょう）（生（なま）の肉（にく）や野菜（やさい））を扱う（あつかう）場所（ばしょ）と、完成（かんせい）した製品（せいひん）を扱う（あつかう）場所（ばしょ）を分け（分け）ます。", "B. どちらの場所（ばしょ）も同（おな）じ靴（くつ）で行き来（いきき）していいです。", "C. 非汚染区（ひおせんく）から汚染区（おせんく）に入（はい）るときだけ手（て）を洗（あら）います。"],  
+                answer: 0,  
+                explanation: "Memisahkan area kotor (osemku) dan area bersih (hiosemku) sangat penting untuk mencegah penyebaran mikroba."  
+            },  
+            {  
+                id: 28,  
+                question: "機器（きかい）の洗浄（せんじょう）について、正（ただ）しいものはどれですか。",  
+                options: ["A. 毎日（まいにち）使（つか）っている機械（きかい）なら、洗（あら）わずに消毒（しょうどく）スプレーだけでいいです。", "B. 分解（ぶんかい）できる部品（ぶひん）は分解（ぶんかい）して、細（こま）かいところまで洗（あら）います。", "C. スイッチを入れ（いれ）たまま洗剤（せんざい）で洗（あら）います。"],  
+                answer: 1,  
+                explanation: "Komponen mesin yang bisa dilepas harus dibongkar (bunkai) agar sela-sela terkecil dapat dibersihkan."  
+            },  
+            {  
+                id: 29,  
+                question: "害虫（がいちゅう・ゴキブリやハエなど）を防（ふせ）ぐ方法（ほうほう）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 生（なま）ゴミは蓋（ふた）のないバケツに入れ（いれ）ておきます。", "B. 窓（まど）やドアを開け（あけ）っぱなしにして換気（かんき）します。", "C. 餌（えさ）になる食べ（たべ）のこしや水（みず）を残（のこ）さないように清掃（せいそう）します。"],  
+                answer: 2,  
+                explanation: "Mencegah hama dilakukan dengan menghilangkan sumber makanan dan air serta menutup akses masuk."  
+            },  
+            {  
+                id: 30,  
+                question: "賞味期限（しょうみきげん）の説明（せつめい）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 安全（あんぜん）に食（た）べることができる期限（きげん）（過（す）ぎたら食（た）べないほうがいい）。", "B. おいしく食（た）べることができる期限（きげん）。", "C. 食品（しょくひん）を作（つく）った日付（ひづけ）のこと。"],  
+                answer: 1,  
+                explanation: "Shoumi kigen = Kualitas rasa terbaik (Best Before). Sedangkan 消費期限 (Shouhi kigen) = Batas keutuhan/keamanan (Use By)."  
+            },  
+            {  
+                id: 31,  
+                question: "先入れ先出し（さきいれさきだし）のルールとして、正（ただ）しいものはどれですか。",  
+                options: ["A. 古い（ふるい）原料（げんりょう）から順番（じゅんばん）に使（つか）います。", "B. 新しく（あたらしく）入荷（にゅうか）した新しい（あたらしい）原料（げんりょう）から先（さき）に使（つか）います。", "C. 重い（おもい）ものから順番（じゅんばん）に使（つか）います。"],  
+                answer: 0,  
+                explanation: "First-in, First-out (FIFO) berarti menggunakan barang yang datang/dibuat lebih awal terlebih dahulu."  
+            },  
+            {  
+                id: 32,  
+                question: "解凍（かいとう・凍った（こおった）ものを溶かす（とかす））方法（ほうほう）として、一番（いちばん）安全（あんぜん）なものはどれですか。",  
+                options: ["A. 室温（しつおん）（25℃ の部屋（へや））に長時間（ちょうじかん）放置（ほうち）する。", "B. 冷蔵庫（れいぞうこ）（冷蔵室（れいぞうしつ））の中（なか）でゆっくり解凍（かいとう）する。", "C. 温かい（あたたかい）お湯（ゆ）につけて放置（ほうち）する。"],  
+                answer: 1,  
+                explanation: "Thawing/penyahbekuan paling aman dilakukan di dalam ruang pendingin (chiller) agar suhu makanan tetap di luar zona bahaya."  
+            },  
+            {  
+                id: 33,  
+                question: "重い（おもい）荷物（にもつ）を持ち上げる（もちあげる）とき、腰（こし）を痛め（いため）ない方法（ほうほう）はどれですか。",  
+                options: ["A. 膝（ひざ）を曲げ（まげ）ずに、腰（こし）だけを曲げ（まげ）て持ち上げ（もちあげ）ます。", "B. 荷物（にもつ）に体（からだ）を近づけ（ちかづけ）て、膝（ひざ）を曲げ（まげ）て腰（こし）を落とし（おとし）てから持ち上げ（もちあげ）ます。", "C. 体（からだ）をねじりながら勢い（いきおい）よく持ち上げ（もちあげ）ます。"],  
+                answer: 1,  
+                explanation: "Cara mengangkat beban berat: dekatkan tubuh, tekuk lutut, turunkan pinggul, lalu angkat menggunakan kekuatan kaki (bukan membongkokkan punggung)."  
+            },  
+            {  
+                id: 34,  
+                question: "機械（きかい）に挟まれ（はさまれ）そうになったときや、異常（いじょう）があったときの行動（こうどう）はどれですか。",  
+                options: ["A. すぐに非常停止（ひじょうていし）ボタンを押し（おし）て機械（きかい）を止め（とめ）ます。", "B. 動き（うごき）ながら手（て）を入れ（いれ）て直し（なおし）ます。", "C. 作業（さぎょう）が終わる（おわる）までそのままにしておきます。"],  
+                answer: 0,  
+                explanation: "Jika terjadi kejanggalan atau bahaya pada mesin, langkah pertama yang wajib dilakukan adalah menekan tombol berhenti darurat (emergency stop)."  
+            },  
+            {  
+                id: 35,  
+                question: "整理（せいり）の説明（せつめい）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 必要（ひつよう）なものを決（き）まった場所（ばしょ）に置く（おく）こと。", "B. いらないものを捨てる（すてる）こと。", "C. いつも掃除（そうじ）をしてきれいにすること。"],  
+                answer: 1,  
+                explanation: "Seiri (Ringkas) berarti membuang/memisahkan barang yang tidak diperlukan."  
+            },  
+            {  
+                id: 36,  
+                question: "5S運動（うんどう）の「整頓（せいとん）」の説明（せつめい）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 必要（ひつよう）なものを、いつでも使（つか）えるように決め（きめ）られた場所（ばしょ）に置く（おく）こと。", "B. 汚れ（よごれ）を拭き（ふき）取っ（とっ）てきれいにすること。", "C. ルールを守る（まもる）習慣（しゅうかん）をつけること。"],  
+                answer: 0,  
+                explanation: "Seiton (Rapi) berarti menempatkan barang yang dibutuhkan pada tempat yang telah ditentukan agar mudah diambil."  
+            },  
+            {  
+                id: 37,  
+                question: "床（ゆか）で滑って（すべって）転ば（ころば）ないための注意点（ちゅういてん）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 水（みず）や油（あぶら）が落ち（おち）ていたら、あとで掃除（そうじ）すればいいのでそのままにします。", "B. 水（みず）や油（あぶら）が落ち（おち）ていたら、すぐに拭き（ふき）取り（とり）ます。", "C. 濡れた（ぬれた）床（ゆか）の上（うえ）を走っ（はしっ）て移動（いどう）します。"],  
+                answer: 1,  
+                explanation: "Tumpahan air atau minyak di lantai pabrik harus segera dibersihkan saat itu juga untuk mencegah kecelakaan terpeleset."  
+            },  
+            {  
+                id: 38,  
+                question: "刃物（はもの・ナイフや包丁（ほうちょう））を使（つか）うときの安全（あんぜん）ルールはどれですか。",  
+                options: ["A. 刃（は）を人（ひと）に向け（むけ）たまま手渡し（てわたし）ます。", "B. 切る（きる）ときは、刃（は）の進行（しんこう）方向（ほうこう）に手（て）を置か（おか）ないようにします。", "C. ポケットに裸（はだか）のまま入れ（いれ）て持ち運び（もちはこび）ます。"],  
+                answer: 1,  
+                explanation: "Saat memotong, pastikan tangan penahan tidak berada di jalur pergerakan mata pisau."  
+            },  
+            {  
+                id: 39,  
+                question: "火傷（やけど）を防ぐ（ふせぐ）ための行動（こうどう）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 熱い（あつい）スープや油（あぶら）を運ぶ（はこぶ）ときは、声（こえ）をかけ合っ（あっ）て慎重（しんちょう）に運び（はこび）ます。", "B. 熱い（あつい）鍋（なべ）を触る（さわる）ときは、濡れた（ぬれた）ぞうきんを使（つか）います。", "C. 蒸気（じょうき）が出（で）ているところに直接（ちょくせつ）手（て）をかざします。"],  
+                answer: 0,  
+                explanation: "Membawa cairan panas harus dilakukan dengan hati-hati dan saling memberi aba-aba/suara kepada rekan kerja sekitar."  
+            },  
+            {  
+                id: 40,  
+                question: "作業中（さぎょうちゅう）の事故（じこ）を防ぐ（ふせぐ）ための基本（きほん）として、正（ただ）しいものはどれですか。",  
+                options: ["A. 自分（じぶん）の判断（はんだん）で勝手（かって）に機械（きかい）のルールを変え（かえ）てもいいです。", "B. 「ヒヤリハット（ヒヤッとしたこと）」があれば、みんなで共有（きょうゆう）して対策（たいさく）します。", "C. 安全（あんぜん）カバーを外し（はずし）て作業（さぎょう）したほうが早い（はやい）ので外し（はずし）ます。"],  
+                answer: 1,  
+                explanation: "Mengomunikasikan kejadian Hiyari-hatto (kejadian hampir celaka) sangat berguna untuk mencegah terjadinya kecelakaan kerja yang sebenarnya di masa depan."  
+            }  
+        ];  
+  
         // State Management  
-        let currentSetIndex = 1; // 1, 2, 3, or 4  
+        let currentSetIndex = 1; // 1, 2, 3, 4, or 5  
         let currentQuestions = set1Questions;  
         let currentTab = 'quiz';  
         let currentQuestionIndex = 0;  
@@ -1184,13 +1471,14 @@
             // Sound effects can be integrated here if needed
         }  
   
-        // Change Active Quiz Set (Set 1, Set 2, Set 3, or Set 4)  
+        // Change Active Quiz Set (Set 1, Set 2, Set 3, Set 4, or Set 5)  
         function changeQuizSet(setNum) {  
             currentSetIndex = setNum;  
             const btn1 = document.getElementById('btnSelectSet1');  
             const btn2 = document.getElementById('btnSelectSet2');  
             const btn3 = document.getElementById('btnSelectSet3');  
             const btn4 = document.getElementById('btnSelectSet4');  
+            const btn5 = document.getElementById('btnSelectSet5');  
   
             const inactiveClass = "py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition text-slate-600 hover:bg-slate-100 border border-transparent flex items-center justify-center gap-1 sm:gap-1.5";  
             const activeClass = "py-2 px-2 sm:px-3 text-xs sm:text-sm font-bold rounded-xl transition bg-brand-50 text-brand-700 border border-brand-200 flex items-center justify-center gap-1 sm:gap-1.5 shadow-sm";  
@@ -1199,6 +1487,7 @@
             btn2.className = inactiveClass;  
             btn3.className = inactiveClass;  
             btn4.className = inactiveClass;  
+            btn5.className = inactiveClass;  
   
             if (setNum === 1) {  
                 currentQuestions = set1Questions;  
@@ -1236,6 +1525,15 @@
                 document.getElementById('startTotalQuestions').innerText = "30 Soal";  
                 document.getElementById('quizSetBadgeText').innerText = "Kuis Hari Keempat (K3 & Keselamatan)";  
                 document.getElementById('studyHeaderDesc').innerText = "Pelajari 30 soal Kuis Hari Keempat (K3 Lanjutan) dengan Furigana dan pembahasan Bahasa Indonesia.";  
+            } else if (setNum === 5) {  
+                currentQuestions = set5Questions;  
+                btn5.className = activeClass;  
+                document.getElementById('startCoverTitle').innerText = "Simulasi Kuis Hari Kelima";  
+                document.getElementById('startCoverDesc').innerText = "Uji pemahaman komprehensif Anda tentang Higienitas, Manajemen Pengolahan Makanan, dan Keselamatan Kerja (K3).";  
+                document.getElementById('startCoverIcon').className = "fa-solid fa-list-check";  
+                document.getElementById('startTotalQuestions').innerText = "40 Soal";  
+                document.getElementById('quizSetBadgeText').innerText = "Kuis Hari Kelima";  
+                document.getElementById('studyHeaderDesc').innerText = "Pelajari 40 soal Kuis Hari Kelima beserta kunci jawaban dan penjelasannya.";  
             }  
   
             // Reset screens  
@@ -1429,7 +1727,7 @@
             const resultTitle = document.getElementById('resultTitle');  
             const resultSubtitle = document.getElementById('resultSubtitle');  
   
-            const setName = currentSetIndex === 1 ? 'Hari Pertama' : (currentSetIndex === 2 ? 'Hari Kedua (HACCP)' : (currentSetIndex === 3 ? 'Hari Ketiga (K3 & Keselamatan)' : 'Hari Keempat (K3 Lanjutan)'));  
+            const setName = currentSetIndex === 1 ? 'Hari Pertama' : (currentSetIndex === 2 ? 'Hari Kedua (HACCP)' : (currentSetIndex === 3 ? 'Hari Ketiga (K3 & Keselamatan)' : (currentSetIndex === 4 ? 'Hari Keempat (K3 Lanjutan)' : 'Hari Kelima')));  
   
             if (scorePercentage >= 80) {  
                 badgeIcon.className = "w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-4 bg-emerald-100 text-emerald-600 border-4 border-emerald-200 shadow-emerald-200";  
@@ -1448,7 +1746,7 @@
             const container = document.getElementById('studyList');  
             container.innerHTML = '';  
   
-            const setTag = currentSetIndex === 1 ? 'Hari Pertama' : (currentSetIndex === 2 ? 'Hari Kedua' : (currentSetIndex === 3 ? 'Hari Ketiga' : 'Hari Keempat'));  
+            const setTag = currentSetIndex === 1 ? 'Hari Pertama' : (currentSetIndex === 2 ? 'Hari Kedua' : (currentSetIndex === 3 ? 'Hari Ketiga' : (currentSetIndex === 4 ? 'Hari Keempat' : 'Hari Kelima')));  
   
             currentQuestions.forEach((q, index) => {  
                 const card = document.createElement('div');  
